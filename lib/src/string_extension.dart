@@ -1,11 +1,11 @@
 import 'localization_manager.dart';
 
-/// Adds localization helpers to `String`.
+/// Adds Localization Helpers To `String`.
 ///
-/// - When [translations] are provided, the string is treated as the default
-///   text and the map contains per-locale overrides (e.g. `{ 'en': 'Hello' }`).
-/// - When [translations] is omitted, the string is treated as a translation
-///   key that will be looked up from `lib/localization.json` via
+/// - When [translations] Are Provided, The String Is Treated As The Default
+///   Text And The Map Contains Per-Locale Overrides (e.g. `{ 'en': 'Hello' }`).
+/// - When [translations] Is Omitted, The String Is Treated As A Translation
+///   Key That Will Be Looked Up From `lib/localization.json` Via
 ///   [LocalizationManager].
 extension LocalizationExtension on String {
   /// Returns the localized value for this string.

@@ -44,6 +44,9 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
   @override
   void initState() {
     super.initState();
+    // Ensure the inherited widget exposes the requested default locale
+    // immediately, even before async initialization completes.
+    _currentLocale = widget.defaultLocale;
     _initialize();
     LocalizationManager.instance.addListener(_onLocaleChanged);
   }

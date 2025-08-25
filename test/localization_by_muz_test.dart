@@ -3,6 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
 void main() {
+  // Ensure the singleton is reset after each test to avoid state leakage
+  tearDown(() {
+    LocalizationManager.instance.dispose();
+  });
+
   group('String Extension Tests', () {
     test('inline localization with translations map', () {
       final translations = {

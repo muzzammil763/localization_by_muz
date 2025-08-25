@@ -1,10 +1,10 @@
-// Localization by Muz — Flutter localization package.
+// Localization By Muzamil Ghafoor — Flutter Localization Package.
 //
-// Provides simple localization for Flutter apps using either inline
-// translations or a JSON file at `lib/localization.json`. Includes widgets
-// and helpers for instant runtime language switching.
+// Provides Simple Localization For Flutter Apps Using Either Inline
+// Translations Or A JSON File At `lib/localization.json`. Includes Widgets
+// And Helpers For Instant Runtime Language Switching.
 
-export 'src/string_extension.dart';
 export 'src/localization_manager.dart';
 export 'src/localization_provider.dart';
 export 'src/localized_widget.dart';
+export 'src/string_extension.dart';
