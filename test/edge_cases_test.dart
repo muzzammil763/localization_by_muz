@@ -154,11 +154,9 @@ void main() {
     });
 
     group('Widget Edge Cases', () {
-      testWidgets('LocalizationProvider with null child', (
-        WidgetTester tester,
-      ) async {
+      test('LocalizationProvider constructs with non-null child', () {
         expect(
-          () => LocalizationProvider(defaultLocale: 'en', child: Container()),
+          LocalizationProvider(defaultLocale: 'en', child: Container()),
           isA<LocalizationProvider>(),
         );
       });
@@ -193,8 +191,10 @@ void main() {
           ),
         );
 
-        await tester.pump();
-        expect(find.textContaining('Test'), findsOneWidget);
+        await tester.pumpAndSettle();
+        // The last nested provider uses defaultLocale 'es', so the inline
+        // translation should resolve to 'Spanish'.
+        expect(find.text('Spanish'), findsOneWidget);
       });
 
       testWidgets('LocalizationProvider.setLocale without context', (
@@ -306,10 +306,11 @@ void main() {
 
     group('Memory and Resource Tests', () {
       test('repeated initialization does not leak memory', () async {
+        TestWidgetsFlutterBinding.ensureInitialized();
         manager.setLocale('en');
 
         for (int i = 0; i < 100; i++) {
-          await manager.initialize(defaultLocale: 'en');
+          await manager.initialize(defaultLocale: 'en', skipAssetLoading: true);
         }
 
         expect(manager.currentLocale, 'en');

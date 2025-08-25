@@ -1,3 +1,9 @@
+## 1.0.2
+
+- Bump package version to 1.0.2
+- README: update dependency example to ^1.0.2
+- Example: update About screen version text to v1.0.2
+
 ## 1.0.1
 
 - Bump package version to 1.0.1

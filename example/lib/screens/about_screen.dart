@@ -41,7 +41,7 @@ class AboutScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            "v1.0.1",
+                            "v1.0.2",
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: Colors.grey[800],

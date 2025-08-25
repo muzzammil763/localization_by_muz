@@ -2,8 +2,15 @@ import 'package:flutter/widgets.dart';
 
 import 'localization_manager.dart';
 
+/// Provides localization state to the widget tree and initializes
+/// [LocalizationManager].
+///
+/// Wrap your app with [LocalizationProvider] to enable string localization and
+/// instant runtime language switching via [setLocale].
 class LocalizationProvider extends StatefulWidget {
+  /// The subtree that will have access to localization state.
   final Widget child;
+  /// The initial locale code to use (e.g. `en`, `fr`).
   final String defaultLocale;
 
   const LocalizationProvider({
@@ -15,10 +22,15 @@ class LocalizationProvider extends StatefulWidget {
   @override
   State<LocalizationProvider> createState() => _LocalizationProviderState();
 
+  /// Returns the nearest [LocalizationInherited] above in the tree, or `null`
+  /// if none is found.
   static LocalizationInherited? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<LocalizationInherited>();
   }
 
+  /// Changes the current locale for the entire app at runtime.
+  ///
+  /// Widgets that depend on localization will rebuild automatically.
   static void setLocale(BuildContext context, String locale) {
     LocalizationManager.instance.setLocale(locale);
   }
@@ -66,13 +78,20 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
     return LocalizationInherited(
       locale: _currentLocale,
       isInitialized: _isInitialized,
-      child: widget.child,
+      child: KeyedSubtree(
+        key: ValueKey<String>(_currentLocale),
+        child: widget.child,
+      ),
     );
   }
 }
 
+/// Inherited widget that exposes the current locale and initialization state to
+/// descendants.
 class LocalizationInherited extends InheritedWidget {
+  /// The active locale code for the app.
   final String locale;
+  /// Whether the localization manager has finished initialization.
   final bool isInitialized;
 
   const LocalizationInherited({
@@ -82,6 +101,7 @@ class LocalizationInherited extends InheritedWidget {
     required super.child,
   });
 
+  /// Notifies dependents when either the locale or initialization state changes.
   @override
   bool updateShouldNotify(LocalizationInherited oldWidget) {
     return locale != oldWidget.locale ||

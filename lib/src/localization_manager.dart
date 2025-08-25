@@ -3,27 +3,49 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+/// Manages loading translations and resolving localized strings.
+///
+/// This is a simple singleton that reads a JSON file from
+/// `lib/localization.json` and provides translation lookup for the current
+/// locale. Use [initialize] once at app start (handled by
+/// `LocalizationProvider`) and [setLocale] to switch languages at runtime.
 class LocalizationManager {
   static final LocalizationManager _instance = LocalizationManager._internal();
+  /// Returns the singleton instance of [LocalizationManager].
   static LocalizationManager get instance => _instance;
 
   LocalizationManager._internal();
 
+  /// The currently selected locale code (e.g. `en`, `fr`).
   String _currentLocale = 'en';
   Map<String, Map<String, String>> _translations = {};
   bool _isInitialized = false;
 
+  /// The currently selected locale code (e.g. `en`, `fr`).
   String get currentLocale => _currentLocale;
 
-  Future<void> initialize({String defaultLocale = 'en'}) async {
+  /// Initializes the manager and loads translations from JSON.
+  ///
+  /// The [defaultLocale] determines the initial locale for lookups.
+  /// This method is safe to call multiple times; subsequent calls are no-ops.
+  ///
+  /// Set [skipAssetLoading] to `true` to bypass reading `lib/localization.json`.
+  /// This is primarily useful in tests where the asset may not be present.
+  Future<void> initialize({String defaultLocale = 'en', bool skipAssetLoading = false}) async {
     if (_isInitialized) return;
 
     _currentLocale = defaultLocale;
-    await _loadTranslations();
+    if (!skipAssetLoading) {
+      await _loadTranslations();
+    } else {
+      _translations = {};
+    }
     _isInitialized = true;
   }
 
+  /// Resets the cached state. Primarily useful in tests.
   void reset() {
+    _currentLocale = 'en';
     _isInitialized = false;
     _translations.clear();
     _listeners.clear();
@@ -48,6 +70,7 @@ class LocalizationManager {
     }
   }
 
+  /// Sets the current [locale] and notifies listeners.
   void setLocale(String locale) {
     if (_currentLocale != locale) {
       _currentLocale = locale;
@@ -55,6 +78,9 @@ class LocalizationManager {
     }
   }
 
+  /// Looks up a localized value for a translation [key].
+  ///
+  /// Returns [key] itself if the key or the current locale is missing.
   String translate(String key) {
     if (_translations.containsKey(key)) {
       return _translations[key]?[_currentLocale] ?? key;
@@ -64,12 +90,15 @@ class LocalizationManager {
 
   final List<VoidCallback> _listeners = [];
 
+  /// Read-only list of listeners that are notified when the locale changes.
   List<VoidCallback> get listeners => List.unmodifiable(_listeners);
 
+  /// Registers a [listener] to be called after locale changes.
   void addListener(VoidCallback listener) {
     _listeners.add(listener);
   }
 
+  /// Unregisters a previously added [listener].
   void removeListener(VoidCallback listener) {
     _listeners.remove(listener);
   }
@@ -80,7 +109,9 @@ class LocalizationManager {
     }
   }
 
+  /// Disposes internal state: clears listeners and translations, and resets
+  /// initialization so the manager can be re-initialized (useful for tests).
   void dispose() {
-    _listeners.clear();
+    reset();
   }
 }
