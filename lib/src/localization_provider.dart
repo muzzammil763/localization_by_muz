@@ -10,6 +10,7 @@ import 'localization_manager.dart';
 class LocalizationProvider extends StatefulWidget {
   /// The subtree that will have access to localization state.
   final Widget child;
+
   /// The initial locale code to use (e.g. `en`, `fr`).
   final String defaultLocale;
 
@@ -91,6 +92,7 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
 class LocalizationInherited extends InheritedWidget {
   /// The active locale code for the app.
   final String locale;
+
   /// Whether the localization manager has finished initialization.
   final bool isInitialized;
 

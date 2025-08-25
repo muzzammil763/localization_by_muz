@@ -11,14 +11,19 @@ class LocalizedText extends StatelessWidget {
   /// The raw text (default) or the translation key when [translations] is
   /// omitted.
   final String text;
+
   /// Optional per-locale overrides (e.g. `{ 'en': 'Hello', 'fr': 'Bonjour' }`).
   final Map<String, String>? translations;
+
   /// The style to use for the text.
   final TextStyle? style;
+
   /// The alignment of the text.
   final TextAlign? textAlign;
+
   /// The maximum number of lines to display.
   final int? maxLines;
+
   /// How to handle text that overflows the available space.
   final TextOverflow? overflow;
 

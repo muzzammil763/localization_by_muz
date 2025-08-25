@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 /// `LocalizationProvider`) and [setLocale] to switch languages at runtime.
 class LocalizationManager {
   static final LocalizationManager _instance = LocalizationManager._internal();
+
   /// Returns the singleton instance of [LocalizationManager].
   static LocalizationManager get instance => _instance;
 
@@ -31,7 +32,8 @@ class LocalizationManager {
   ///
   /// Set [skipAssetLoading] to `true` to bypass reading `lib/localization.json`.
   /// This is primarily useful in tests where the asset may not be present.
-  Future<void> initialize({String defaultLocale = 'en', bool skipAssetLoading = false}) async {
+  Future<void> initialize(
+      {String defaultLocale = 'en', bool skipAssetLoading = false}) async {
     if (_isInitialized) return;
 
     _currentLocale = defaultLocale;
