@@ -1,0 +1,20 @@
+name: localization_by_muz
+description: A simple Flutter package for easy localization with inline text support and JSON-based translations
+version: 1.0.1
+
+homepage: https://github.com/muzzammil763/localization_by_muz
+repository: https://github.com/muzzammil763/localization_by_muz
+issue_tracker: https://github.com/muzzammil763/localization_by_muz/issues
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any

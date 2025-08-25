@@ -1,0 +1,135 @@
+{
+  "appTitle": {
+    "en": "Localization Demo",
+    "fr": "Démo de Localisation",
+    "es": "Demo de Localización",
+    "de": "Lokalisierungs-Demo",
+    "ar": "عرض التوطين"
+  },
+  "helloWorld": {
+    "en": "Hello World",
+    "fr": "Bonjour Le Monde",
+    "es": "Hola Mundo",
+    "de": "Hallo Welt",
+    "ar": "مرحبا بالعالم"
+  },
+  "welcome": {
+    "en": "Welcome to our app!",
+    "fr": "Bienvenue dans notre application!",
+    "es": "¡Bienvenido a nuestra aplicación!",
+    "de": "Willkommen in unserer App!",
+    "ar": "مرحباً بك في تطبيقنا!"
+  },
+  "goodbye": {
+    "en": "Goodbye! See you later",
+    "fr": "Au revoir! À bientôt",
+    "es": "¡Adiós! Hasta luego",
+    "de": "Auf Wiedersehen! Bis später",
+    "ar": "وداعاً! أراك لاحقاً"
+  },
+  "homeScreen": {
+    "en": "Home Screen",
+    "fr": "Écran d'accueil",
+    "es": "Pantalla de inicio",
+    "de": "Startbildschirm",
+    "ar": "الشاشة الرئيسية"
+  },
+  "inlineExample": {
+    "en": "Inline Localization",
+    "fr": "Localisation en ligne",
+    "es": "Localización en línea",
+    "de": "Inline-Lokalisierung",
+    "ar": "الترجمة المباشرة"
+  },
+  "jsonExample": {
+    "en": "JSON Localization",
+    "fr": "Localisation JSON",
+    "es": "Localización JSON",
+    "de": "JSON-Lokalisierung",
+    "ar": "ترجمة JSON"
+  },
+  "languageSelection": {
+    "en": "Language Selection",
+    "fr": "Sélection de langue",
+    "es": "Selección de idioma",
+    "de": "Sprachauswahl",
+    "ar": "اختيار اللغة"
+  },
+  "currentLanguage": {
+    "en": "Current Language",
+    "fr": "Langue actuelle",
+    "es": "Idioma actual",
+    "de": "Aktuelle Sprache",
+    "ar": "اللغة الحالية"
+  },
+  "selectLanguage": {
+    "en": "Select a language",
+    "fr": "Sélectionnez une langue",
+    "es": "Selecciona un idioma",
+    "de": "Wählen Sie eine Sprache",
+    "ar": "اختر لغة"
+  },
+  "aboutApp": {
+    "en": "About This App",
+    "fr": "À propos de cette application",
+    "es": "Acerca de esta aplicación",
+    "de": "Über diese App",
+    "ar": "حول هذا التطبيق"
+  },
+  "description": {
+    "en": "This app demonstrates both inline and JSON-based localization using the localization_by_muz package.",
+    "fr": "Cette application démontre la localisation en ligne et basée sur JSON en utilisant le package localization_by_muz.",
+    "es": "Esta aplicación demuestra la localización en línea y basada en JSON usando el paquete localization_by_muz.",
+    "de": "Diese App demonstriert sowohl Inline- als auch JSON-basierte Lokalisierung mit dem localization_by_muz-Paket.",
+    "ar": "يوضح هذا التطبيق كلاً من الترجمة المباشرة والقائمة على JSON باستخدام حزمة localization_by_muz."
+  },
+  "features": {
+    "en": "Features:",
+    "fr": "Caractéristiques:",
+    "es": "Características:",
+    "de": "Funktionen:",
+    "ar": "الميزات:"
+  },
+  "feature1": {
+    "en": "• Instant language switching",
+    "fr": "• Changement de langue instantané",
+    "es": "• Cambio de idioma instantáneo",
+    "de": "• Sofortiger Sprachwechsel",
+    "ar": "• تبديل اللغة الفوري"
+  },
+  "feature2": {
+    "en": "• No app restart required",
+    "fr": "• Aucun redémarrage d'application requis",
+    "es": "• No se requiere reinicio de la aplicación",
+    "de": "• Kein App-Neustart erforderlich",
+    "ar": "• لا حاجة لإعادة تشغيل التطبيق"
+  },
+  "feature3": {
+    "en": "• Two localization methods",
+    "fr": "• Deux méthodes de localisation",
+    "es": "• Dos métodos de localización",
+    "de": "• Zwei Lokalisierungsmethoden",
+    "ar": "• طريقتان للترجمة"
+  },
+  "counter": {
+    "en": "Counter",
+    "fr": "Compteur",
+    "es": "Contador",
+    "de": "Zähler",
+    "ar": "العداد"
+  },
+  "counterValue": {
+    "en": "You have pressed the button this many times:",
+    "fr": "Vous avez appuyé sur le bouton ce nombre de fois:",
+    "es": "Has presionado el botón esta cantidad de veces:",
+    "de": "Sie haben den Button so oft gedrückt:",
+    "ar": "لقد ضغطت على الزر هذا العدد من المرات:"
+  },
+  "increment": {
+    "en": "Increment",
+    "fr": "Incrémenter",
+    "es": "Incrementar",
+    "de": "Erhöhen",
+    "ar": "زيادة"
+  }
+}
