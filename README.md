@@ -20,7 +20,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  localization_by_muz: ^1.0.2
+  localization_by_muz: ^1.0.3
 ```
 
 ## Usage
@@ -253,12 +253,47 @@ Set<String> missingKeys = LocalizationManager.instance.missingKeys;
 LocalizationManager.instance.clearMissingKeys();
 ```
 
+### Hot-reload Translations (Debug Mode)
+
+Enable automatic reloading of translations during development for faster iteration:
+
+```dart
+LocalizationProvider(
+  defaultLocale: 'en',
+  enableHotReload: true, // Enable hot-reload in debug mode
+  child: MyApp(),
+)
+```
+
+**Features:**
+- **Debug-only**: Hot-reload only works in debug mode for performance
+- **Automatic detection**: Checks for translation changes every 2 seconds
+- **Live updates**: UI updates automatically when translations change
+- **Error handling**: Gracefully handles asset loading failures
+- **Performance optimized**: Only reloads when actual changes are detected
+
+**How it works:**
+```dart
+// Hot-reload is automatically enabled when:
+// 1. enableHotReload: true is set
+// 2. App is running in debug mode
+// 3. Asset loader is available
+
+// Console output when hot-reload is active:
+// 🔥 Hot-reload enabled for translations (checking every 2 seconds)
+// 🔄 Translation changes detected, reloading...
+// ✅ Translations reloaded successfully
+```
+
+**Note:** Hot-reload requires your translations to be loaded from assets. It works with all asset loaders including `DefaultAssetLoader`, `PerLocaleAssetLoader`, and custom implementations.
+
 ## Features Breakdown
 
 - **Two localization methods**: Choose between inline translations or JSON file approach
 - **Parameter interpolation**: Dynamic text with `{placeholder}` support via `.localizeArgs(args: {...})`
 - **Custom asset loading**: Pluggable loaders (DefaultAssetLoader, PerLocaleAssetLoader, CompositeAssetLoader, MemoryAssetLoader)
 - **Missing key diagnostics**: Toggleable logs, `onMissingKey` callback, optional debug overlay
+- **Hot-reload translations**: Automatic translation reloading in debug mode for faster development
 - **Instant updates**: Language changes reflect immediately in the UI
 - **Zero configuration**: No build runner or code generation required
 - **Simple API**: Just use `.localize()` on any string

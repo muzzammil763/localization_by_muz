@@ -1,3 +1,13 @@
+## 1.0.3
+
+- Add missing key diagnostics with configurable logging and debug overlay
+- Implement hot-reload translations in debug mode for faster development
+- Add `enableMissingKeyLogging` and `onMissingKey` callback to LocalizationProvider
+- Add `showDebugOverlay` option to display missing keys visually
+- Add `enableHotReload` option for automatic translation reloading in debug mode
+- Comprehensive test coverage for new diagnostic and hot-reload features
+- Update documentation and example app to demonstrate new features
+
 ## 1.0.2
 
 - Bump package version to 1.0.2

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       assetLoader: assetLoader,
       enableMissingKeyLogging: true,
       showDebugOverlay: true,
+      enableHotReload: true, // Enable hot-reload for development
       onMissingKey: (key, locale) {
         debugPrint('🔍 Missing translation: "$key" for locale: $locale');
       },

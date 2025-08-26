@@ -30,6 +30,9 @@ class LocalizationProvider extends StatefulWidget {
   
   /// Whether to show debug overlay for missing keys (development only).
   final bool showDebugOverlay;
+  
+  /// Whether to enable hot-reload for translations in debug mode.
+  final bool enableHotReload;
 
   const LocalizationProvider({
     super.key,
@@ -39,6 +42,7 @@ class LocalizationProvider extends StatefulWidget {
     this.enableMissingKeyLogging = false,
     this.onMissingKey,
     this.showDebugOverlay = false,
+    this.enableHotReload = false,
   });
 
   @override
@@ -79,6 +83,7 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
       enableMissingKeyLogging: widget.enableMissingKeyLogging,
       onMissingKey: widget.onMissingKey,
       showDebugOverlay: widget.showDebugOverlay,
+      enableHotReload: widget.enableHotReload,
     );
     if (mounted) {
       setState(() {

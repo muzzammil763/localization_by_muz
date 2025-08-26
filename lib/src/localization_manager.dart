@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -35,6 +36,11 @@ class LocalizationManager {
   OnMissingKeyCallback? _onMissingKey;
   final Set<String> _missingKeys = <String>{};
   bool _showDebugOverlay = false;
+  
+  // Hot-reload functionality
+  bool _enableHotReload = false;
+  Timer? _hotReloadTimer;
+  Map<String, Map<String, String>> _lastTranslations = {};
 
   /// The currently selected locale code (e.g. `en`, `fr`).
   String get currentLocale => _currentLocale;
@@ -47,6 +53,9 @@ class LocalizationManager {
   
   /// Whether debug overlay for missing keys is enabled.
   bool get showDebugOverlay => _showDebugOverlay;
+  
+  /// Whether hot-reload for translations is enabled.
+  bool get enableHotReload => _enableHotReload;
   
   /// Set of missing translation keys that have been encountered.
   Set<String> get missingKeys => Set.unmodifiable(_missingKeys);
@@ -69,6 +78,7 @@ class LocalizationManager {
   /// - [enableMissingKeyLogging]: Enable console logging for missing keys
   /// - [onMissingKey]: Callback function called when a key is missing
   /// - [showDebugOverlay]: Show debug overlay for missing keys (development only)
+  /// - [enableHotReload]: Enable automatic reloading of translations in debug mode
   Future<void> initialize({
     String defaultLocale = 'en',
     bool skipAssetLoading = false,
@@ -76,6 +86,7 @@ class LocalizationManager {
     bool enableMissingKeyLogging = false,
     OnMissingKeyCallback? onMissingKey,
     bool showDebugOverlay = false,
+    bool enableHotReload = false,
   }) async {
     if (_isInitialized) return;
 
@@ -87,8 +98,17 @@ class LocalizationManager {
     _onMissingKey = onMissingKey;
     _showDebugOverlay = showDebugOverlay && kDebugMode;
     
+    // Set hot-reload option (only works in debug mode)
+    _enableHotReload = enableHotReload && kDebugMode;
+    
     if (!skipAssetLoading) {
       await _loadTranslations();
+      _lastTranslations = Map.from(_translations);
+      
+      // Start hot-reload timer if enabled
+      if (_enableHotReload) {
+        _startHotReloadTimer();
+      }
     } else {
       _translations = {};
     }
@@ -108,6 +128,12 @@ class LocalizationManager {
     _onMissingKey = null;
     _missingKeys.clear();
     _showDebugOverlay = false;
+    
+    // Reset hot-reload
+    _enableHotReload = false;
+    _hotReloadTimer?.cancel();
+    _hotReloadTimer = null;
+    _lastTranslations.clear();
   }
 
   Future<void> _loadTranslations() async {
@@ -203,6 +229,57 @@ class LocalizationManager {
   /// Clears the set of missing keys that have been tracked.
   void clearMissingKeys() {
     _missingKeys.clear();
+  }
+  
+  /// Starts the hot-reload timer to periodically check for translation changes.
+  void _startHotReloadTimer() {
+    if (!kDebugMode || !_enableHotReload) return;
+    
+    _hotReloadTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      _checkForTranslationChanges();
+    });
+    
+    debugPrint('🔥 Hot-reload enabled for translations (checking every 2 seconds)');
+  }
+  
+  /// Checks if translations have changed and reloads them if necessary.
+  Future<void> _checkForTranslationChanges() async {
+    if (!_enableHotReload || _assetLoader == null) return;
+    
+    try {
+      final newTranslations = await _assetLoader!.loadTranslations();
+      
+      // Compare with last known translations
+      if (!_translationsEqual(_lastTranslations, newTranslations)) {
+        debugPrint('🔄 Translation changes detected, reloading...');
+        _translations = newTranslations;
+        _lastTranslations = Map.from(newTranslations);
+        _notifyListeners();
+        debugPrint('✅ Translations reloaded successfully');
+      }
+    } catch (e) {
+      debugPrint('⚠️ Hot-reload failed: $e');
+    }
+  }
+  
+  /// Compares two translation maps for equality.
+  bool _translationsEqual(Map<String, Map<String, String>> a, Map<String, Map<String, String>> b) {
+    if (a.length != b.length) return false;
+    
+    for (final key in a.keys) {
+      if (!b.containsKey(key)) return false;
+      
+      final mapA = a[key]!;
+      final mapB = b[key]!;
+      
+      if (mapA.length != mapB.length) return false;
+      
+      for (final subKey in mapA.keys) {
+        if (mapA[subKey] != mapB[subKey]) return false;
+      }
+    }
+    
+    return true;
   }
 
   final List<VoidCallback> _listeners = [];
