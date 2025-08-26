@@ -10,15 +10,15 @@ A prioritized checklist of potential enhancements for `localization_by_muz`. Tic
 - [ ] MaterialApp integration (expose `locale`, `supportedLocales`) and RTL text-direction handling; optional `LocalizationMaterialApp` wrapper
 
 ## Medium-impact, low effort
-- [ ] Configurable asset strategy: custom paths and per-locale files (e.g., `assets/i18n/en.json`, `fr.json`) with merge
-- [ ] Pluggable loaders: `AssetLoader`, `MemoryLoader`, `HttpLoader` with simple cache; inject via `initialize()`
+- [x] Configurable asset strategy: custom paths and per-locale files (e.g., `assets/i18n/en.json`, `fr.json`) with merge
+- [x] Pluggable loaders: `AssetLoader`, `MemoryLoader`, `HttpLoader` with simple cache; inject via `initialize()`
 - [ ] Locale type support: accept/return `Locale` while keeping current String-based API for backward compatibility
 - [ ] BuildContext helpers: `context.t('key', args: {...})`, `context.locale`, `context.setLocale(Locale)`
 - [ ] Dev/CI CLI: validate JSON, detect missing/extra keys, generate language skeletons, sort keys
 - [ ] Widgets: `LocaleDropdown` (simple switcher), `LocalizedRichText` / `LocalizedTextSpan`
 
 ## Nice-to-have
-- [ ] Missing key diagnostics: toggleable logs, `onMissingKey(key, locale)` callback, optional debug overlay
+- [x] Missing key diagnostics: toggleable logs, `onMissingKey(key, locale)` callback, optional debug overlay
 - [ ] Hot-reload translations in debug (auto re-read assets)
 - [ ] Number/date formatting helpers (optional `intl` behind a feature flag)
 - [ ] Namespaces/dotted keys (nested JSON) support

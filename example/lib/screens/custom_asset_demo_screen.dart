@@ -10,116 +10,160 @@ class CustomAssetDemoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Custom Asset Loading Demo'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Custom Asset Loading Examples',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
-              ),
-            ),
-            const SizedBox(height: 20),
-            
-            // Per-locale file example
-            Card(
+            Card.outlined(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Per-Locale Files',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text('customGreeting'.localize()),
-                    Text('customFarewell'.localize()),
-                    Text('customMessage'.localize()),
-                  ],
-                ),
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Parameter interpolation example
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Parameter Interpolation',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
                     Text(
-                      'parameterExample'.localizeArgs(
-                        args: {
-                          'name': 'Developer',
-                          'app': 'Custom Asset Demo',
-                        },
+                      'Custom Asset Loading Examples',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
                       ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      'Demonstrating per-locale file loading and parameter interpolation',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
             ),
-            
             const SizedBox(height: 16),
-            
-            // Information card
-            Card(
-              color: Colors.blue.shade50,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.info, color: Colors.blue.shade700),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Asset Loading Strategy',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue.shade700,
-                          ),
+            Text(
+              'Examples:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  Card.outlined(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.language,
+                        color: Colors.blue,
+                        size: 32,
+                      ),
+                      title: Text(
+                        'Per-Locale Files',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          Text('customGreeting'.localize()),
+                          Text('customFarewell'.localize()),
+                          Text('customMessage'.localize()),
+                        ],
+                      ),
+                      trailing: Icon(Icons.folder_open),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'This demo uses PerLocaleAssetLoader to load translations from separate files:',
+                  ),
+                  Card.outlined(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.code,
+                        color: Colors.green,
+                        size: 32,
+                      ),
+                      title: Text(
+                        'Parameter Interpolation',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          Text(
+                            'parameterExample'.localizeArgs(
+                              args: {
+                                'name': 'Developer',
+                                'app': 'Custom Asset Demo',
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: Icon(Icons.dynamic_form),
                     ),
-                    const SizedBox(height: 4),
-                    const Text('• assets/i18n/en.json'),
-                    const Text('• assets/i18n/fr.json'),
-                    const Text('• assets/i18n/es.json'),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Each file contains locale-specific translations that are automatically merged by the asset loader.',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                  Card.outlined(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.info_outline,
+                        color: Colors.orange,
+                        size: 32,
+                      ),
+                      title: Text(
+                        'Asset Loading Strategy',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          const Text('PerLocaleAssetLoader loads from:'),
+                          const Text('• assets/i18n/en.json'),
+                          const Text('• assets/i18n/fr.json'),
+                          const Text('• assets/i18n/es.json'),
+                        ],
+                      ),
+                      trailing: Icon(Icons.settings),
                     ),
-                  ],
-                ),
+                  ),
+                  Card.outlined(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.merge_type,
+                        color: Colors.purple,
+                        size: 32,
+                      ),
+                      title: Text(
+                        'Composite Loading',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Combines DefaultAssetLoader and PerLocaleAssetLoader for maximum flexibility',
+                          ),
+                        ],
+                      ),
+                      trailing: Icon(Icons.layers),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

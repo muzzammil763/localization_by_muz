@@ -8,6 +8,8 @@
 
 - **Inline Localization**: Use `.localize()` method directly on strings with inline translations
 - **JSON-based Localization**: Use a simple JSON file for organized translations
+- **Parameter Interpolation**: Support for dynamic text with placeholders like `{name}` via args map
+- **Custom Asset Loading**: Pluggable asset loaders including per-locale files and composite strategies
 - **Instant Language Switching**: Change languages instantly without app restart
 - **No Code Generation**: No need for build runner or code generation commands
 - **Simple Setup**: Just add the package and start using
@@ -164,9 +166,99 @@ LocalizationProvider.setLocale(context, 'es'); // Switch to Spanish
 
 The UI will update instantly without requiring app restart or refresh!
 
+### Parameter Interpolation
+
+Support for dynamic text with placeholders:
+
+```dart
+// Inline translations with parameters
+Text("greeting".localizeArgs(
+  translations: {
+    "en": "Hello {name}, welcome to {app}!",
+    "fr": "Bonjour {name}, bienvenue dans {app}!",
+    "es": "¡Hola {name}, bienvenido a {app}!"
+  },
+  args: {
+    "name": "John",
+    "app": "My App"
+  }
+))
+
+// JSON-based translations with parameters
+// In localization.json:
+// {
+//   "userWelcome": {
+//     "en": "Welcome back, {username}!",
+//     "fr": "Bon retour, {username}!"
+//   }
+// }
+
+Text("userWelcome".localizeArgs(
+  args: {"username": "Alice"}
+))
+```
+
+### Custom Asset Loading
+
+Use different asset loading strategies:
+
+```dart
+// Per-locale files (assets/i18n/en.json, fr.json, etc.)
+LocalizationProvider(
+  defaultLocale: 'en',
+  assetLoader: PerLocaleAssetLoader(basePath: 'assets/i18n'),
+  child: MyApp(),
+)
+
+// Composite loading (combine multiple loaders)
+LocalizationProvider(
+  defaultLocale: 'en',
+  assetLoader: CompositeAssetLoader([
+    DefaultAssetLoader(),
+    PerLocaleAssetLoader(basePath: 'assets/i18n'),
+  ]),
+  child: MyApp(),
+)
+```
+
+### Missing Key Diagnostics
+
+Track and debug missing translation keys:
+
+```dart
+// Enable logging and debug overlay
+LocalizationProvider(
+  defaultLocale: 'en',
+  enableMissingKeyLogging: true,
+  showDebugOverlay: true, // Only works in debug mode
+  onMissingKey: (key, locale) {
+    print('Missing key: $key for locale: $locale');
+    // Send to analytics, log to file, etc.
+  },
+  child: MyApp(),
+)
+
+// Configure at runtime
+LocalizationManager.instance.configureMissingKeyDiagnostics(
+  enableLogging: true,
+  onMissingKey: (key, locale) {
+    // Handle missing keys
+  },
+);
+
+// Access missing keys
+Set<String> missingKeys = LocalizationManager.instance.missingKeys;
+
+// Clear tracked missing keys
+LocalizationManager.instance.clearMissingKeys();
+```
+
 ## Features Breakdown
 
 - **Two localization methods**: Choose between inline translations or JSON file approach
+- **Parameter interpolation**: Dynamic text with `{placeholder}` support via `.localizeArgs(args: {...})`
+- **Custom asset loading**: Pluggable loaders (DefaultAssetLoader, PerLocaleAssetLoader, CompositeAssetLoader, MemoryAssetLoader)
+- **Missing key diagnostics**: Toggleable logs, `onMissingKey` callback, optional debug overlay
 - **Instant updates**: Language changes reflect immediately in the UI
 - **Zero configuration**: No build runner or code generation required
 - **Simple API**: Just use `.localize()` on any string

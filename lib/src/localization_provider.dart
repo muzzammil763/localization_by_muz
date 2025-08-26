@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'asset_loader.dart';
 import 'localization_manager.dart';
+import 'missing_key_debug_overlay.dart';
 
 /// Provides localization state to the widget tree and initializes
 /// [LocalizationManager].
@@ -20,12 +21,24 @@ class LocalizationProvider extends StatefulWidget {
   /// If not provided, defaults to [DefaultAssetLoader] which reads from
   /// 'lib/localization.json' for backward compatibility.
   final AssetLoader? assetLoader;
+  
+  /// Whether to enable console logging for missing translation keys.
+  final bool enableMissingKeyLogging;
+  
+  /// Callback function called when a translation key is missing.
+  final OnMissingKeyCallback? onMissingKey;
+  
+  /// Whether to show debug overlay for missing keys (development only).
+  final bool showDebugOverlay;
 
   const LocalizationProvider({
     super.key,
     required this.child,
     this.defaultLocale = 'en',
     this.assetLoader,
+    this.enableMissingKeyLogging = false,
+    this.onMissingKey,
+    this.showDebugOverlay = false,
   });
 
   @override
@@ -63,6 +76,9 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
     await LocalizationManager.instance.initialize(
       defaultLocale: widget.defaultLocale,
       assetLoader: widget.assetLoader,
+      enableMissingKeyLogging: widget.enableMissingKeyLogging,
+      onMissingKey: widget.onMissingKey,
+      showDebugOverlay: widget.showDebugOverlay,
     );
     if (mounted) {
       setState(() {
@@ -88,13 +104,20 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
 
   @override
   Widget build(BuildContext context) {
+    Widget child = KeyedSubtree(
+      key: ValueKey<String>(_currentLocale),
+      child: widget.child,
+    );
+    
+    // Wrap with debug overlay if enabled
+    if (widget.showDebugOverlay) {
+      child = MissingKeyDebugOverlay(child: child);
+    }
+    
     return LocalizationInherited(
       locale: _currentLocale,
       isInitialized: _isInitialized,
-      child: KeyedSubtree(
-        key: ValueKey<String>(_currentLocale),
-        child: widget.child,
-      ),
+      child: child,
     );
   }
 }
