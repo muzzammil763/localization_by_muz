@@ -82,12 +82,28 @@ class LocalizationManager {
 
   /// Looks up a localized value for a translation [key].
   ///
+  /// Supports simple parameter interpolation using `{param}` placeholders via
+  /// [args]. If an argument is missing, the placeholder is left unchanged.
+  ///
   /// Returns [key] itself if the key or the current locale is missing.
-  String translate(String key) {
+  String translate(String key, {Map<String, Object?>? args}) {
+    String value;
     if (_translations.containsKey(key)) {
-      return _translations[key]?[_currentLocale] ?? key;
+      value = _translations[key]?[_currentLocale] ?? key;
+    } else {
+      value = key;
     }
-    return key;
+
+    if (args == null || args.isEmpty) return value;
+
+    // Replace placeholders of the form {name} with provided args.
+    final regExp = RegExp(r'\{(\w+)\}');
+    return value.replaceAllMapped(regExp, (match) {
+      final argKey = match.group(1)!;
+      final argVal = args[argKey];
+      if (argVal == null) return match.group(0)!; // leave placeholder as-is
+      return argVal.toString();
+    });
   }
 
   final List<VoidCallback> _listeners = [];

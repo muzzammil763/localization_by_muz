@@ -31,6 +31,51 @@ void main() {
     test('inline localization without translations map uses LocalizationManager', () {
       expect('someKey'.localize(), 'someKey');
     });
+
+    test('localizeArgs supports multiple placeholders (inline)', () {
+      LocalizationManager.instance.setLocale('en');
+      const translations = {
+        'en': 'Hi {first} {last}',
+      };
+
+      expect(
+        'fullName'.localizeArgs(
+          translations: translations,
+          args: {'first': 'Muzamil', 'last': 'Ghafoor'},
+        ),
+        'Hi Muzamil Ghafoor',
+      );
+    });
+
+    test('localizeArgs supports repeated placeholders (inline)', () {
+      LocalizationManager.instance.setLocale('en');
+      const translations = {'en': '{name} {name}'};
+
+      expect(
+        'repeat'.localizeArgs(translations: translations, args: {'name': 'Alex'}),
+        'Alex Alex',
+      );
+    });
+
+    test('localizeArgs stringifies non-string args (inline)', () {
+      LocalizationManager.instance.setLocale('en');
+      const translations = {'en': 'You have {count} items'};
+
+      expect(
+        'items'.localizeArgs(translations: translations, args: {'count': 3}),
+        'You have 3 items',
+      );
+    });
+
+    test('localizeArgs leaves unknown placeholders unchanged (inline)', () {
+      LocalizationManager.instance.setLocale('en');
+      const translations = {'en': 'Hi {name} {unknown}'};
+
+      expect(
+        'unknown'.localizeArgs(translations: translations, args: {'name': 'A'}),
+        'Hi A {unknown}',
+      );
+    });
   });
 
   group('LocalizationManager Tests', () {
@@ -389,6 +434,70 @@ void main() {
       await tester.pump();
 
       expect(find.text('English'), findsOneWidget);
+    });
+  });
+
+  group('Interpolation Tests (Inline)', () {
+    test('localizeArgs replaces placeholders with args (inline)', () {
+      LocalizationManager.instance.setLocale('en');
+      const translations = {
+        'en': 'Hello {name}',
+        'fr': 'Bonjour {name}',
+      };
+
+      expect('greet'.localizeArgs(translations: translations, args: {'name': 'Muz'}),
+          'Hello Muz');
+
+      LocalizationManager.instance.setLocale('fr');
+      expect('greet'.localizeArgs(translations: translations, args: {'name': 'Muz'}),
+          'Bonjour Muz');
+    });
+
+    test('localizeArgs leaves missing placeholders unchanged (inline)', () {
+      LocalizationManager.instance.setLocale('en');
+      const translations = {'en': 'Welcome, {name}!'};
+
+      expect('welcome'.localizeArgs(translations: translations), 'Welcome, {name}!');
+    });
+
+    testWidgets('LocalizedText supports args and updates across locales (inline)',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: LocalizationProvider(
+            defaultLocale: 'en',
+            child: Builder(
+              builder: (context) {
+                return Scaffold(
+                  body: Column(
+                    children: [
+                      LocalizedText(
+                        'greet',
+                        translations: const {
+                          'en': 'Hello {name}',
+                          'fr': 'Bonjour {name}',
+                        },
+                        args: const {'name': 'Alex'},
+                      ),
+                      ElevatedButton(
+                        onPressed: () => LocalizationProvider.setLocale(context, 'fr'),
+                        child: const Text('FR'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Hello Alex'), findsOneWidget);
+
+      await tester.tap(find.text('FR'));
+      await tester.pump();
+
+      expect(find.text('Bonjour Alex'), findsOneWidget);
     });
   });
 }

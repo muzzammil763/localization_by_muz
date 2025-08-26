@@ -27,6 +27,10 @@ class LocalizedText extends StatelessWidget {
   /// How to handle text that overflows the available space.
   final TextOverflow? overflow;
 
+  /// Optional arguments used to replace placeholders like `{name}` in the
+  /// resolved string.
+  final Map<String, Object?>? args;
+
   const LocalizedText(
     this.text, {
     super.key,
@@ -35,19 +39,22 @@ class LocalizedText extends StatelessWidget {
     this.textAlign,
     this.maxLines,
     this.overflow,
+    this.args,
   });
 
   @override
   Widget build(BuildContext context) {
-    // This will make the widget rebuild when locale changes
-    final localizationData = LocalizationProvider.of(context);
+    // This call establishes a dependency so the widget rebuilds on locale changes.
+    LocalizationProvider.of(context);
 
     String localizedText;
     if (translations != null) {
-      final currentLocale = localizationData?.locale ?? 'en';
-      localizedText = translations![currentLocale] ?? text;
+      localizedText = text.localizeArgs(
+        translations: translations,
+        args: args,
+      );
     } else {
-      localizedText = text.localize();
+      localizedText = text.localizeArgs(args: args);
     }
 
     return Text(

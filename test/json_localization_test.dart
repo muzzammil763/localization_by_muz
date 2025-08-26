@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
@@ -203,6 +204,90 @@ void main() {
 
         manager.setLocale('fr');
         expect('testKey'.localize(inlineTranslations), 'Inline French');
+      });
+
+      testWidgets('String.localizeArgs() replaces placeholders with args (JSON)',
+          (WidgetTester tester) async {
+        const mockJsonData = {
+          "greetName": {
+            "en": "Hello {name}",
+            "fr": "Bonjour {name}"
+          }
+        };
+
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(
+          const MethodChannel('flutter/assets'),
+          (MethodCall methodCall) async {
+            if (methodCall.method == 'loadString' &&
+                methodCall.arguments == 'lib/localization.json') {
+              return json.encode(mockJsonData);
+            }
+            return null;
+          },
+        );
+
+        await manager.initialize(defaultLocale: 'en');
+
+        expect('greetName'.localizeArgs(args: {'name': 'Muz'}), 'Hello Muz');
+
+        manager.setLocale('fr');
+        expect('greetName'.localizeArgs(args: {'name': 'Muz'}), 'Bonjour Muz');
+
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(
+          const MethodChannel('flutter/assets'),
+          null,
+        );
+      });
+
+      testWidgets('LocalizedText uses args with JSON keys', (WidgetTester tester) async {
+        const mockJsonData = {
+          "welcomeName": {
+            "en": "Welcome, {name}!",
+            "fr": "Bienvenue, {name}!"
+          }
+        };
+
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(
+          const MethodChannel('flutter/assets'),
+          (MethodCall methodCall) async {
+            if (methodCall.method == 'loadString' &&
+                methodCall.arguments == 'lib/localization.json') {
+              return json.encode(mockJsonData);
+            }
+            return null;
+          },
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: LocalizationProvider(
+              defaultLocale: 'en',
+              child: Builder(
+                builder: (context) {
+                  return Scaffold(
+                    body: Column(
+                      children: const [
+                        LocalizedText('welcomeName', args: {'name': 'Alex'}),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        expect(find.text('Welcome, Alex!'), findsOneWidget);
+
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(
+          const MethodChannel('flutter/assets'),
+          null,
+        );
       });
     });
 
