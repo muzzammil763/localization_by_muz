@@ -20,8 +20,8 @@ A prioritized checklist of potential enhancements for `localization_by_muz`. Tic
 ## Nice-to-have
 - [x] Missing key diagnostics: toggleable logs, `onMissingKey(key, locale)` callback, optional debug overlay
 - [x] Hot-reload translations in debug (auto re-read assets)
-- [ ] Number/date formatting helpers (optional `intl` behind a feature flag)
-- [ ] Namespaces/dotted keys (nested JSON) support
+- [x] Number/date formatting helpers (optional `intl` behind a feature flag)
+- [x] Namespaces/dotted keys (nested JSON) support
 
 ## API proposals (backward compatible)
 - [ ] `LocalizationProvider` props: `supportedLocales`, `fallbackLocale`, `useSystemLocale`, `persistKey`, `assetPaths`/`loader`

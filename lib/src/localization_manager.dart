@@ -25,7 +25,7 @@ class LocalizationManager {
 
   /// The currently selected locale code (e.g. `en`, `fr`).
   String _currentLocale = 'en';
-  Map<String, Map<String, String>> _translations = {};
+  Map<String, dynamic> _translations = {};
   bool _isInitialized = false;
   AssetLoader? _assetLoader;
 
@@ -38,7 +38,7 @@ class LocalizationManager {
   // Hot-reload functionality
   bool _enableHotReload = false;
   Timer? _hotReloadTimer;
-  Map<String, Map<String, String>> _lastTranslations = {};
+  Map<String, dynamic> _lastTranslations = {};
 
   /// The currently selected locale code (e.g. `en`, `fr`).
   String get currentLocale => _currentLocale;
@@ -157,12 +157,37 @@ class LocalizationManager {
   /// Supports simple parameter interpolation using `{param}` placeholders via
   /// [args]. If an argument is missing, the placeholder is left unchanged.
   ///
+  /// Supports namespaces/dotted keys for nested JSON structures.
+  /// For example, 'user.profile.name' will look for nested structure:
+  /// ```json
+  /// {
+  ///   "user.profile.name": {
+  ///     "en": "Name",
+  ///     "fr": "Nom"
+  ///   }
+  /// }
+  /// ```
+  /// Or in nested format:
+  /// ```json
+  /// {
+  ///   "user": {
+  ///     "profile": {
+  ///       "name": {
+  ///         "en": "Name",
+  ///         "fr": "Nom"
+  ///       }
+  ///     }
+  ///   }
+  /// }
+  /// ```
+  ///
   /// Returns [key] itself if the key or the current locale is missing.
   /// When a key is missing, triggers missing key diagnostics if enabled.
   String translate(String key, {Map<String, Object?>? args}) {
     String value;
     bool keyMissing = false;
 
+    // First try direct key lookup (backward compatibility)
     if (_translations.containsKey(key)) {
       final localeValue = _translations[key]?[_currentLocale];
       if (localeValue != null) {
@@ -172,8 +197,14 @@ class LocalizationManager {
         keyMissing = true;
       }
     } else {
-      value = key;
-      keyMissing = true;
+      // Try nested key lookup for dotted keys
+      final nestedValue = _getNestedValue(key, _currentLocale);
+      if (nestedValue != null) {
+        value = nestedValue;
+      } else {
+        value = key;
+        keyMissing = true;
+      }
     }
 
     // Handle missing key diagnostics
@@ -191,6 +222,33 @@ class LocalizationManager {
       if (argVal == null) return match.group(0)!; // leave placeholder as-is
       return argVal.toString();
     });
+  }
+
+  /// Attempts to get a nested value from the translations using dotted key notation.
+  ///
+  /// For a key like 'user.profile.name', this will traverse the nested structure
+  /// to find the translation value for the given locale.
+  String? _getNestedValue(String key, String locale) {
+    final keyParts = key.split('.');
+    
+    // Try to find nested structure in translations
+    dynamic current = _translations;
+    
+    for (final part in keyParts) {
+      if (current is Map<String, dynamic> && current.containsKey(part)) {
+        current = current[part];
+      } else {
+        return null; // Path not found
+      }
+    }
+    
+    // At this point, current should be a Map<String, String> with locale keys
+    if (current is Map<String, dynamic> && current.containsKey(locale)) {
+      final value = current[locale];
+      return value is String ? value : null;
+    }
+    
+    return null;
   }
 
   /// Handles missing key diagnostics when a translation key is not found.
@@ -264,7 +322,7 @@ class LocalizationManager {
 
   /// Compares two translation maps for equality.
   bool _translationsEqual(
-      Map<String, Map<String, String>> a, Map<String, Map<String, String>> b) {
+      Map<String, dynamic> a, Map<String, dynamic> b) {
     if (a.length != b.length) return false;
 
     for (final key in a.keys) {

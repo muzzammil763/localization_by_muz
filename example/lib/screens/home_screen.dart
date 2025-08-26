@@ -4,6 +4,7 @@ import 'package:localization_by_muz/localization_by_muz.dart';
 
 import 'about_screen.dart';
 import 'custom_asset_demo_screen.dart';
+import 'formatting_demo_screen.dart';
 import 'inline_example_screen.dart';
 import 'json_example_screen.dart';
 import 'language_selection_screen.dart';
@@ -174,6 +175,25 @@ class HomeScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => const CustomAssetDemoScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildNavigationCard(
+                        context,
+                        title: "formatting.title".localize(),
+                        subtitle: "formattingDesc".localize({
+                          "en": "Number/date formatting & nested keys",
+                          "fr": "Formatage nombre/date & clés imbriquées",
+                          "es": "Formato número/fecha & claves anidadas",
+                          "de": "Zahlen-/Datumsformat & verschachtelte Schlüssel",
+                          "ar": "تنسيق الأرقام/التاريخ والمفاتيح المتداخلة",
+                        }),
+                        icon: Icons.format_list_numbered,
+                        color: Colors.indigo,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FormattingDemoScreen(),
                           ),
                         ),
                       ),

@@ -49,7 +49,10 @@ class _MissingKeyDebugOverlayState extends State<MissingKeyDebugOverlay> {
       return widget.child;
     }
     
-    return Stack(
+    // Check if we already have a Directionality ancestor
+    final hasDirectionality = Directionality.maybeOf(context) != null;
+    
+    Widget stackWidget = Stack(
       children: [
         widget.child,
         Positioned(
@@ -127,5 +130,15 @@ class _MissingKeyDebugOverlayState extends State<MissingKeyDebugOverlay> {
         ),
       ],
     );
+    
+    // Only wrap with Directionality if one doesn't already exist
+    if (!hasDirectionality) {
+      return Directionality(
+        textDirection: TextDirection.ltr,
+        child: stackWidget,
+      );
+    }
+    
+    return stackWidget;
   }
 }

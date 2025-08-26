@@ -5,6 +5,7 @@
 // And Helpers For Instant Runtime Language Switching.
 
 export 'src/asset_loader.dart';
+export 'src/formatting_helpers.dart';
 export 'src/localization_manager.dart';
 export 'src/localization_provider.dart';
 export 'src/localized_widget.dart';

@@ -9,6 +9,8 @@
 - **Inline Localization**: Use `.localize()` method directly on strings with inline translations
 - **JSON-based Localization**: Use a simple JSON file for organized translations
 - **Parameter Interpolation**: Support for dynamic text with placeholders like `{name}` via args map
+- **Number/Date Formatting**: Built-in helpers for formatting numbers, currencies, percentages, dates, and times with locale support
+- **Namespaces/Dotted Keys**: Support for nested JSON structures and dotted key notation (e.g., `user.profile.name`)
 - **Custom Asset Loading**: Pluggable asset loaders including per-locale files and composite strategies
 - **Instant Language Switching**: Change languages instantly without app restart
 - **No Code Generation**: No need for build runner or code generation commands
@@ -198,6 +200,92 @@ Text("userWelcome".localizeArgs(
 ))
 ```
 
+### Number and Date Formatting
+
+The package includes built-in formatting helpers for numbers, currencies, percentages, dates, and times with locale-aware formatting:
+
+```dart
+import 'package:localization_by_muz/localization_by_muz.dart';
+
+// Number formatting
+String formattedNumber = FormattingHelpers.formatNumber(1234.56, 'en'); // "1,234.56"
+String germanNumber = FormattingHelpers.formatNumber(1234.56, 'de'); // "1.234,56"
+String frenchNumber = FormattingHelpers.formatNumber(1234.56, 'fr'); // "1 234,56"
+
+// Currency formatting
+String usdAmount = FormattingHelpers.formatCurrency(1234.56, 'en', 'USD'); // "$1,234.56"
+String euroAmount = FormattingHelpers.formatCurrency(1234.56, 'de', 'EUR'); // "1.234,56 €"
+
+// Percentage formatting
+String percentage = FormattingHelpers.formatPercentage(0.1234, 'en'); // "12.3%"
+String germanPercent = FormattingHelpers.formatPercentage(0.1234, 'de'); // "12,3 %"
+
+// Date formatting
+String usDate = FormattingHelpers.formatDate(DateTime.now(), 'en'); // "12/25/2023"
+String germanDate = FormattingHelpers.formatDate(DateTime.now(), 'de'); // "25.12.2023"
+String customDate = FormattingHelpers.formatDate(DateTime.now(), 'en', pattern: 'yyyy-MM-dd'); // "2023-12-25"
+
+// Time formatting
+String usTime = FormattingHelpers.formatTime(DateTime.now(), 'en'); // "3:30 PM"
+String germanTime = FormattingHelpers.formatTime(DateTime.now(), 'de'); // "15:30"
+```
+
+**Optional Intl Integration**: The formatting helpers are designed with a feature flag (`kUseIntlFormatting`) that can be enabled to use the `intl` package for more advanced formatting when needed.
+
+### Namespaces and Dotted Keys
+
+Support for nested JSON structures and dotted key notation for better organization:
+
+```json
+{
+  "user": {
+    "profile": {
+      "name": {
+        "en": "Name",
+        "fr": "Nom",
+        "es": "Nombre"
+      },
+      "email": {
+        "en": "Email Address",
+        "fr": "Adresse e-mail",
+        "es": "Dirección de correo"
+      }
+    },
+    "settings": {
+      "theme": {
+        "en": "Theme",
+        "fr": "Thème",
+        "es": "Tema"
+      }
+    }
+  },
+  "app": {
+    "title": {
+      "en": "My Application",
+      "fr": "Mon Application",
+      "es": "Mi Aplicación"
+    }
+  }
+}
+```
+
+Use dotted notation to access nested translations:
+
+```dart
+// Access nested translations using dotted keys
+Text("user.profile.name".localize()), // "Name" (in English)
+Text("user.profile.email".localize()), // "Email Address"
+Text("user.settings.theme".localize()), // "Theme"
+Text("app.title".localize()), // "My Application"
+
+// Also works with parameter interpolation
+Text("user.welcome.message".localizeArgs(
+  args: {"username": "John"}
+)), // If the nested key contains "Welcome back, {username}!"
+```
+
+**Backward Compatibility**: The package still supports flat key structures, so existing implementations continue to work without changes.
+
 ### Custom Asset Loading
 
 Use different asset loading strategies:
@@ -291,6 +379,8 @@ LocalizationProvider(
 
 - **Two localization methods**: Choose between inline translations or JSON file approach
 - **Parameter interpolation**: Dynamic text with `{placeholder}` support via `.localizeArgs(args: {...})`
+- **Number/date formatting**: Built-in locale-aware formatting for numbers, currencies, percentages, dates, and times
+- **Namespaces/dotted keys**: Support for nested JSON structures and dotted key notation for better organization
 - **Custom asset loading**: Pluggable loaders (DefaultAssetLoader, PerLocaleAssetLoader, CompositeAssetLoader, MemoryAssetLoader)
 - **Missing key diagnostics**: Toggleable logs, `onMissingKey` callback, optional debug overlay
 - **Hot-reload translations**: Automatic translation reloading in debug mode for faster development

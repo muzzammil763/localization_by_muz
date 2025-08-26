@@ -131,5 +131,106 @@
     "es": "Incrementar",
     "de": "Erhöhen",
     "ar": "زيادة"
+  },
+  "formatting": {
+    "title": {
+      "en": "Formatting Examples",
+      "fr": "Exemples de formatage",
+      "es": "Ejemplos de formato",
+      "de": "Formatierungsbeispiele",
+      "ar": "أمثلة التنسيق"
+    },
+    "numbers": {
+      "en": "Numbers",
+      "fr": "Nombres",
+      "es": "Números",
+      "de": "Zahlen",
+      "ar": "الأرقام"
+    },
+    "currency": {
+      "en": "Currency",
+      "fr": "Devise",
+      "es": "Moneda",
+      "de": "Währung",
+      "ar": "العملة"
+    },
+    "percentage": {
+      "en": "Percentage",
+      "fr": "Pourcentage",
+      "es": "Porcentaje",
+      "de": "Prozentsatz",
+      "ar": "النسبة المئوية"
+    },
+    "date": {
+      "en": "Date",
+      "fr": "Date",
+      "es": "Fecha",
+      "de": "Datum",
+      "ar": "التاريخ"
+    },
+    "time": {
+      "en": "Time",
+      "fr": "Heure",
+      "es": "Hora",
+      "de": "Zeit",
+      "ar": "الوقت"
+    }
+  },
+  "user": {
+    "profile": {
+      "name": {
+        "en": "Name",
+        "fr": "Nom",
+        "es": "Nombre",
+        "de": "Name",
+        "ar": "الاسم"
+      },
+      "email": {
+        "en": "Email Address",
+        "fr": "Adresse e-mail",
+        "es": "Dirección de correo",
+        "de": "E-Mail-Adresse",
+        "ar": "عنوان البريد الإلكتروني"
+      },
+      "welcome": {
+        "en": "Welcome back, {username}!",
+        "fr": "Bon retour, {username}!",
+        "es": "¡Bienvenido de nuevo, {username}!",
+        "de": "Willkommen zurück, {username}!",
+        "ar": "مرحباً بعودتك، {username}!"
+      }
+    },
+    "settings": {
+      "theme": {
+        "en": "Theme",
+        "fr": "Thème",
+        "es": "Tema",
+        "de": "Design",
+        "ar": "المظهر"
+      },
+      "language": {
+        "en": "Language",
+        "fr": "Langue",
+        "es": "Idioma",
+        "de": "Sprache",
+        "ar": "اللغة"
+      }
+    }
+  },
+  "nested": {
+    "title": {
+      "en": "Nested Keys Demo",
+      "fr": "Démo des clés imbriquées",
+      "es": "Demo de claves anidadas",
+      "de": "Demo verschachtelter Schlüssel",
+      "ar": "عرض المفاتيح المتداخلة"
+    },
+    "description": {
+      "en": "This demonstrates dotted key notation for nested JSON structures.",
+      "fr": "Ceci démontre la notation par points pour les structures JSON imbriquées.",
+      "es": "Esto demuestra la notación de puntos para estructuras JSON anidadas.",
+      "de": "Dies demonstriert die Punkt-Notation für verschachtelte JSON-Strukturen.",
+      "ar": "يوضح هذا تدوين النقاط للهياكل JSON المتداخلة."
+    }
   }
 }
