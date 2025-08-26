@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:localization_by_muz/src/asset_loader.dart';
@@ -94,7 +93,8 @@ void main() {
       expect(listenerCalled, true);
     });
 
-    testWidgets('Hot-reload handles asset loading errors gracefully', (tester) async {
+    testWidgets('Hot-reload handles asset loading errors gracefully',
+        (tester) async {
       if (!kDebugMode) {
         return;
       }
@@ -115,7 +115,8 @@ void main() {
       expect(manager.currentLocale, 'en');
     });
 
-    testWidgets('Hot-reload does not trigger for identical translations', (tester) async {
+    testWidgets('Hot-reload does not trigger for identical translations',
+        (tester) async {
       if (!kDebugMode) {
         return;
       }
@@ -172,7 +173,7 @@ void main() {
 
       // Check if new language was detected
       expect(listenerCalled, true);
-      
+
       // Switch to new language and verify
       manager.setLocale('fr');
       expect(manager.translate('hello'), 'Bonjour');
@@ -205,7 +206,7 @@ void main() {
 
       // Check if change was detected
       expect(listenerCalled, true);
-      
+
       // Verify removed key returns the key itself
       expect(manager.translate('world'), 'world');
     });

@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 
 import 'asset_loader.dart';
 
@@ -30,13 +28,13 @@ class LocalizationManager {
   Map<String, Map<String, String>> _translations = {};
   bool _isInitialized = false;
   AssetLoader? _assetLoader;
-  
+
   // Missing key diagnostics
   bool _enableMissingKeyLogging = false;
   OnMissingKeyCallback? _onMissingKey;
   final Set<String> _missingKeys = <String>{};
   bool _showDebugOverlay = false;
-  
+
   // Hot-reload functionality
   bool _enableHotReload = false;
   Timer? _hotReloadTimer;
@@ -47,19 +45,19 @@ class LocalizationManager {
 
   /// Whether the manager has been initialized.
   bool get isInitialized => _isInitialized;
-  
+
   /// Whether missing key logging is enabled.
   bool get enableMissingKeyLogging => _enableMissingKeyLogging;
-  
+
   /// Whether debug overlay for missing keys is enabled.
   bool get showDebugOverlay => _showDebugOverlay;
-  
+
   /// Whether hot-reload for translations is enabled.
   bool get enableHotReload => _enableHotReload;
-  
+
   /// Set of missing translation keys that have been encountered.
   Set<String> get missingKeys => Set.unmodifiable(_missingKeys);
-  
+
   /// Current missing key callback function.
   OnMissingKeyCallback? get onMissingKey => _onMissingKey;
 
@@ -92,19 +90,19 @@ class LocalizationManager {
 
     _currentLocale = defaultLocale;
     _assetLoader = assetLoader ?? const DefaultAssetLoader();
-    
+
     // Set missing key diagnostics options
     _enableMissingKeyLogging = enableMissingKeyLogging;
     _onMissingKey = onMissingKey;
     _showDebugOverlay = showDebugOverlay && kDebugMode;
-    
+
     // Set hot-reload option (only works in debug mode)
     _enableHotReload = enableHotReload && kDebugMode;
-    
+
     if (!skipAssetLoading) {
       await _loadTranslations();
       _lastTranslations = Map.from(_translations);
-      
+
       // Start hot-reload timer if enabled
       if (_enableHotReload) {
         _startHotReloadTimer();
@@ -122,13 +120,13 @@ class LocalizationManager {
     _translations.clear();
     _listeners.clear();
     _assetLoader = null;
-    
+
     // Reset missing key diagnostics
     _enableMissingKeyLogging = false;
     _onMissingKey = null;
     _missingKeys.clear();
     _showDebugOverlay = false;
-    
+
     // Reset hot-reload
     _enableHotReload = false;
     _hotReloadTimer?.cancel();
@@ -164,7 +162,7 @@ class LocalizationManager {
   String translate(String key, {Map<String, Object?>? args}) {
     String value;
     bool keyMissing = false;
-    
+
     if (_translations.containsKey(key)) {
       final localeValue = _translations[key]?[_currentLocale];
       if (localeValue != null) {
@@ -177,7 +175,7 @@ class LocalizationManager {
       value = key;
       keyMissing = true;
     }
-    
+
     // Handle missing key diagnostics
     if (keyMissing) {
       _handleMissingKey(key);
@@ -194,21 +192,22 @@ class LocalizationManager {
       return argVal.toString();
     });
   }
-  
+
   /// Handles missing key diagnostics when a translation key is not found.
   void _handleMissingKey(String key) {
     // Add to missing keys set
     _missingKeys.add(key);
-    
+
     // Log if enabled
     if (_enableMissingKeyLogging) {
-      debugPrint('Missing translation key: "$key" for locale "$_currentLocale"');
+      debugPrint(
+          'Missing translation key: "$key" for locale "$_currentLocale"');
     }
-    
+
     ///// Call callback if provided
     _onMissingKey?.call(key, _currentLocale);
   }
-  
+
   /// Configures missing key diagnostics at runtime.
   void configureMissingKeyDiagnostics({
     bool? enableLogging,
@@ -225,30 +224,31 @@ class LocalizationManager {
       _showDebugOverlay = showDebugOverlay && kDebugMode;
     }
   }
-  
+
   /// Clears the set of missing keys that have been tracked.
   void clearMissingKeys() {
     _missingKeys.clear();
   }
-  
+
   /// Starts the hot-reload timer to periodically check for translation changes.
   void _startHotReloadTimer() {
     if (!kDebugMode || !_enableHotReload) return;
-    
+
     _hotReloadTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
       _checkForTranslationChanges();
     });
-    
-    debugPrint('🔥 Hot-reload enabled for translations (checking every 2 seconds)');
+
+    debugPrint(
+        '🔥 Hot-reload enabled for translations (checking every 2 seconds)');
   }
-  
+
   /// Checks if translations have changed and reloads them if necessary.
   Future<void> _checkForTranslationChanges() async {
     if (!_enableHotReload || _assetLoader == null) return;
-    
+
     try {
       final newTranslations = await _assetLoader!.loadTranslations();
-      
+
       // Compare with last known translations
       if (!_translationsEqual(_lastTranslations, newTranslations)) {
         debugPrint('🔄 Translation changes detected, reloading...');
@@ -261,24 +261,25 @@ class LocalizationManager {
       debugPrint('⚠️ Hot-reload failed: $e');
     }
   }
-  
+
   /// Compares two translation maps for equality.
-  bool _translationsEqual(Map<String, Map<String, String>> a, Map<String, Map<String, String>> b) {
+  bool _translationsEqual(
+      Map<String, Map<String, String>> a, Map<String, Map<String, String>> b) {
     if (a.length != b.length) return false;
-    
+
     for (final key in a.keys) {
       if (!b.containsKey(key)) return false;
-      
+
       final mapA = a[key]!;
       final mapB = b[key]!;
-      
+
       if (mapA.length != mapB.length) return false;
-      
+
       for (final subKey in mapA.keys) {
         if (mapA[subKey] != mapB[subKey]) return false;
       }
     }
-    
+
     return true;
   }
 
