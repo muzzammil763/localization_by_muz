@@ -1,3 +1,14 @@
+## 1.0.4
+
+- Add number and date formatting helpers with optional `intl` integration
+- Add namespaces and dotted keys support for nested JSON structures
+- Add new `FormattingHelpers` class with methods for numbers, currency, percentages, dates, and times
+- Add support for accessing nested keys using dot notation (e.g., `user.profile.name`)
+- Add enhanced example app with formatting demo screen
+- Fix `MissingKeyDebugOverlay` Directionality widget error
+- Update documentation with comprehensive examples for new features
+- Maintain backward compatibility with existing flat key structures
+
 ## 1.0.3
 
 - Add missing key diagnostics with configurable logging and debug overlay

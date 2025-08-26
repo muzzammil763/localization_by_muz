@@ -22,7 +22,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  localization_by_muz: ^1.0.3
+  localization_by_muz: ^1.0.4
 ```
 
 ## Usage
