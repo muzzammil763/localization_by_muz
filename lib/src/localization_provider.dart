@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'asset_loader.dart';
 import 'localization_manager.dart';
 
 /// Provides localization state to the widget tree and initializes
@@ -14,10 +15,17 @@ class LocalizationProvider extends StatefulWidget {
   /// The initial locale code to use (e.g. `en`, `fr`).
   final String defaultLocale;
 
+  /// Custom asset loader for loading translations.
+  /// 
+  /// If not provided, defaults to [DefaultAssetLoader] which reads from
+  /// 'lib/localization.json' for backward compatibility.
+  final AssetLoader? assetLoader;
+
   const LocalizationProvider({
     super.key,
     required this.child,
     this.defaultLocale = 'en',
+    this.assetLoader,
   });
 
   @override
@@ -54,6 +62,7 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
   void _initialize() async {
     await LocalizationManager.instance.initialize(
       defaultLocale: widget.defaultLocale,
+      assetLoader: widget.assetLoader,
     );
     if (mounted) {
       setState(() {

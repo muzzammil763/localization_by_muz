@@ -1,0 +1,6 @@
+{
+  "customGreeting": "Hello from custom asset loader!",
+  "customFarewell": "Goodbye from per-locale files!",
+  "customMessage": "This message is loaded from assets/i18n/en.json",
+  "parameterExample": "Hello {name}, welcome to {app}!"
+}

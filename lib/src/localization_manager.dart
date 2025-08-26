@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'asset_loader.dart';
+
 /// Manages loading translations and resolving localized strings.
 ///
 /// This is a simple singleton that reads a JSON file from
@@ -21,9 +23,13 @@ class LocalizationManager {
   String _currentLocale = 'en';
   Map<String, Map<String, String>> _translations = {};
   bool _isInitialized = false;
+  AssetLoader? _assetLoader;
 
   /// The currently selected locale code (e.g. `en`, `fr`).
   String get currentLocale => _currentLocale;
+
+  /// Whether the manager has been initialized.
+  bool get isInitialized => _isInitialized;
 
   /// Initializes the manager and loads translations from JSON.
   ///
@@ -32,11 +38,19 @@ class LocalizationManager {
   ///
   /// Set [skipAssetLoading] to `true` to bypass reading `lib/localization.json`.
   /// This is primarily useful in tests where the asset may not be present.
-  Future<void> initialize(
-      {String defaultLocale = 'en', bool skipAssetLoading = false}) async {
+  ///
+  /// Provide a custom [assetLoader] to use alternative loading strategies.
+  /// If not provided, defaults to [DefaultAssetLoader] with 'lib/localization.json'.
+  Future<void> initialize({
+    String defaultLocale = 'en',
+    bool skipAssetLoading = false,
+    AssetLoader? assetLoader,
+  }) async {
     if (_isInitialized) return;
 
     _currentLocale = defaultLocale;
+    _assetLoader = assetLoader ?? const DefaultAssetLoader();
+    
     if (!skipAssetLoading) {
       await _loadTranslations();
     } else {
@@ -51,23 +65,15 @@ class LocalizationManager {
     _isInitialized = false;
     _translations.clear();
     _listeners.clear();
+    _assetLoader = null;
   }
 
   Future<void> _loadTranslations() async {
     try {
-      final String jsonString = await rootBundle.loadString(
-        'lib/localization.json',
-      );
-      final Map<String, dynamic> jsonMap = json.decode(jsonString);
-
-      _translations.clear();
-      jsonMap.forEach((key, value) {
-        if (value is Map<String, dynamic>) {
-          _translations[key] = Map<String, String>.from(value);
-        }
-      });
+      final loader = _assetLoader ?? const DefaultAssetLoader();
+      _translations = await loader.loadTranslations();
     } catch (e) {
-      debugPrint('Warning: Could Not Load localization.json File: $e');
+      debugPrint('Warning: Could not load translations: $e');
       _translations = {};
     }
   }

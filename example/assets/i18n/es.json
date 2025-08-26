@@ -1,0 +1,6 @@
+{
+  "customGreeting": "¡Hola desde el cargador de activos personalizado!",
+  "customFarewell": "¡Adiós desde archivos por idioma!",
+  "customMessage": "Este mensaje se carga desde assets/i18n/es.json",
+  "parameterExample": "¡Hola {name}, bienvenido a {app}!"
+}

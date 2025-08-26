@@ -18,7 +18,7 @@ void main() {
 
     group('JSON Loading Tests', () {
       testWidgets('loads JSON translations correctly', (WidgetTester tester) async {
-        const mockJsonData = {
+        const mockTranslations = {
           "greeting": {
             "en": "Hello",
             "fr": "Bonjour",
@@ -31,19 +31,11 @@ void main() {
           }
         };
 
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(
-          const MethodChannel('flutter/assets'),
-          (MethodCall methodCall) async {
-            if (methodCall.method == 'loadString' &&
-                methodCall.arguments == 'lib/localization.json') {
-              return json.encode(mockJsonData);
-            }
-            return null;
-          },
+        // Use MemoryAssetLoader for testing instead of mocking file system
+        await manager.initialize(
+          defaultLocale: 'en',
+          assetLoader: MemoryAssetLoader(mockTranslations),
         );
-
-        await manager.initialize(defaultLocale: 'en');
 
         expect(manager.translate('greeting'), 'Hello');
         expect(manager.translate('farewell'), 'Goodbye');

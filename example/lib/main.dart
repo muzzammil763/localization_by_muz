@@ -12,8 +12,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create a composite asset loader that combines default and per-locale loading
+    const assetLoader = CompositeAssetLoader([
+      DefaultAssetLoader(), // Load from lib/localization.json (backward compatibility)
+      PerLocaleAssetLoader(
+        basePath: 'assets/i18n',
+        supportedLocales: ['en', 'fr', 'es'],
+      ), // Load from per-locale files
+    ]);
+
     return LocalizationProvider(
       defaultLocale: 'en',
+      assetLoader: assetLoader,
       child: LocalizedBuilder(
         builder: (context, locale) {
           return MaterialApp(

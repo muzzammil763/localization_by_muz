@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
 import 'about_screen.dart';
+import 'custom_asset_demo_screen.dart';
 import 'inline_example_screen.dart';
 import 'json_example_screen.dart';
 import 'language_selection_screen.dart';
@@ -148,6 +149,31 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) =>
                                 const LanguageSelectionScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildNavigationCard(
+                        context,
+                        title: "Custom Assets".localize({
+                          "en": "Custom Assets",
+                          "fr": "Actifs personnalisés",
+                          "es": "Activos personalizados",
+                          "de": "Benutzerdefinierte Assets",
+                          "ar": "الأصول المخصصة",
+                        }),
+                        subtitle: "customAssetDesc".localize({
+                          "en": "Per-locale asset loading demo",
+                          "fr": "Démo de chargement d'actifs par locale",
+                          "es": "Demo de carga de activos por idioma",
+                          "de": "Demo für lokalisierte Asset-Ladung",
+                          "ar": "عرض تحميل الأصول حسب اللغة",
+                        }),
+                        icon: Icons.folder_special,
+                        color: Colors.teal,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CustomAssetDemoScreen(),
                           ),
                         ),
                       ),
