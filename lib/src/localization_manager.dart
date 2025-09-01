@@ -55,9 +55,7 @@ class LocalizationManager {
   /// Returns TextDirection.rtl for RTL languages (Arabic, Urdu, Persian, Hebrew, etc.)
   /// and TextDirection.ltr for all other languages.
   TextDirection get textDirection {
-    if (_cachedTextDirection == null) {
-      _cachedTextDirection = _getTextDirectionForLocale(_currentLocale);
-    }
+    _cachedTextDirection ??= _getTextDirectionForLocale(_currentLocale);
     return _cachedTextDirection!;
   }
 
