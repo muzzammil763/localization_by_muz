@@ -1,3 +1,13 @@
+## 1.0.5
+
+- Add `AnimatedLocalizedText` widget with smooth transition animations for locale changes
+- Add `AnimatedLocalizedTextTransition` enum with 5 animation types: rotation, scale, fade, slide, and 3D Y-axis rotation
+- Add locale persistence using `SharedPreferences` to maintain selected locale across app restarts
+- Add comprehensive test coverage for animated widgets and locale persistence
+- Update RTL demo screen to showcase animated locale switching functionality
+- Maintain backward compatibility with existing `LocalizedText` widget
+- Enhanced user experience with instant animated feedback on locale changes
+
 ## 1.0.4
 
 - Add number and date formatting helpers with optional `intl` integration

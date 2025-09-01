@@ -42,6 +42,12 @@ class LanguageSelectionScreen extends StatelessWidget {
             'nativeName': 'العربية',
             'flag': '🇸🇦',
           },
+          {
+            'code': 'ur',
+            'name': 'Urdu',
+            'nativeName': 'اردو',
+            'flag': '🇵🇰',
+          },
         ];
 
         return Scaffold(
@@ -112,6 +118,7 @@ class LanguageSelectionScreen extends StatelessWidget {
                                   "Los cambios de idioma surten efecto inmediatamente",
                               "de": "Sprachänderungen werden sofort wirksam",
                               "ar": "تغييرات اللغة تدخل حيز التنفيذ فوراً",
+                              "ur": "زبان کی تبدیلیاں فوری طور پر مؤثر ہوتی ہیں",
                             }),
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
@@ -125,6 +132,7 @@ class LanguageSelectionScreen extends StatelessWidget {
                                   "¡No se requiere reinicio de la aplicación!",
                               "de": "Kein App-Neustart erforderlich!",
                               "ar": "لا حاجة لإعادة تشغيل التطبيق!",
+                              "ur": "ایپ کو دوبارہ شروع کرنے کی ضرورت نہیں!",
                             }),
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
@@ -201,6 +209,8 @@ class LanguageSelectionScreen extends StatelessWidget {
                                         "Sprache geändert zu ${language['nativeName']}",
                                     "ar":
                                         "تم تغيير اللغة إلى ${language['nativeName']}",
+                                    "ur":
+                                        "زبان ${language['nativeName']} میں تبدیل کر دی گئی",
                                   }),
                                 ),
                                 duration: const Duration(seconds: 1),

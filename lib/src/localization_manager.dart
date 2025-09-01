@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'asset_loader.dart';
 
@@ -29,6 +31,12 @@ class LocalizationManager {
   bool _isInitialized = false;
   AssetLoader? _assetLoader;
 
+  /// Cache for text direction to avoid repeated calculations
+  TextDirection? _cachedTextDirection;
+
+  /// SharedPreferences key for storing locale
+  static const String _localeKey = 'localization_by_muz_locale';
+
   // Missing key diagnostics
   bool _enableMissingKeyLogging = false;
   OnMissingKeyCallback? _onMissingKey;
@@ -42,6 +50,16 @@ class LocalizationManager {
 
   /// The currently selected locale code (e.g. `en`, `fr`).
   String get currentLocale => _currentLocale;
+
+  /// Gets the text direction for the current locale.
+  /// Returns TextDirection.rtl for RTL languages (Arabic, Urdu, Persian, Hebrew, etc.)
+  /// and TextDirection.ltr for all other languages.
+  TextDirection get textDirection {
+    if (_cachedTextDirection == null) {
+      _cachedTextDirection = _getTextDirectionForLocale(_currentLocale);
+    }
+    return _cachedTextDirection!;
+  }
 
   /// Whether the manager has been initialized.
   bool get isInitialized => _isInitialized;
@@ -88,7 +106,8 @@ class LocalizationManager {
   }) async {
     if (_isInitialized) return;
 
-    _currentLocale = defaultLocale;
+    // Load saved locale from SharedPreferences, fallback to defaultLocale
+    _currentLocale = await _loadSavedLocale() ?? defaultLocale;
     _assetLoader = assetLoader ?? const DefaultAssetLoader();
 
     // Set missing key diagnostics options
@@ -145,10 +164,35 @@ class LocalizationManager {
   }
 
   /// Sets the current [locale] and notifies listeners.
+  /// Also saves the locale to SharedPreferences for persistence.
   void setLocale(String locale) {
     if (_currentLocale != locale) {
       _currentLocale = locale;
+      _cachedTextDirection = null; // Clear cache when locale changes
+      _saveLocale(locale); // Save to SharedPreferences
       _notifyListeners();
+    }
+  }
+
+  /// Loads the saved locale from SharedPreferences.
+  /// Returns null if no locale is saved.
+  Future<String?> _loadSavedLocale() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_localeKey);
+    } catch (e) {
+      debugPrint('Warning: Could not load saved locale: $e');
+      return null;
+    }
+  }
+
+  /// Saves the current locale to SharedPreferences.
+  Future<void> _saveLocale(String locale) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_localeKey, locale);
+    } catch (e) {
+      debugPrint('Warning: Could not save locale: $e');
     }
   }
 
@@ -193,8 +237,14 @@ class LocalizationManager {
       if (localeValue != null) {
         value = localeValue;
       } else {
-        value = key;
-        keyMissing = true;
+        // Try fallback to default locale if current locale is missing
+        final defaultValue = _translations[key]?['en'];
+        if (defaultValue != null) {
+          value = _formatDefaultValue(defaultValue, key);
+        } else {
+          value = _formatDefaultValue(key, key);
+          keyMissing = true;
+        }
       }
     } else {
       // Try nested key lookup for dotted keys
@@ -202,8 +252,14 @@ class LocalizationManager {
       if (nestedValue != null) {
         value = nestedValue;
       } else {
-        value = key;
-        keyMissing = true;
+        // Try fallback to default locale for nested keys
+        final defaultNestedValue = _getNestedValue(key, 'en');
+        if (defaultNestedValue != null) {
+          value = _formatDefaultValue(defaultNestedValue, key);
+        } else {
+          value = _formatDefaultValue(key, key);
+          keyMissing = true;
+        }
       }
     }
 
@@ -230,10 +286,10 @@ class LocalizationManager {
   /// to find the translation value for the given locale.
   String? _getNestedValue(String key, String locale) {
     final keyParts = key.split('.');
-    
+
     // Try to find nested structure in translations
     dynamic current = _translations;
-    
+
     for (final part in keyParts) {
       if (current is Map<String, dynamic> && current.containsKey(part)) {
         current = current[part];
@@ -241,14 +297,52 @@ class LocalizationManager {
         return null; // Path not found
       }
     }
-    
+
     // At this point, current should be a Map<String, String> with locale keys
     if (current is Map<String, dynamic> && current.containsKey(locale)) {
       final value = current[locale];
       return value is String ? value : null;
     }
-    
+
     return null;
+  }
+
+  /// Determines the text direction for a given locale.
+  /// Returns TextDirection.rtl for RTL languages and TextDirection.ltr for others.
+  TextDirection _getTextDirectionForLocale(String locale) {
+    // List of RTL language codes
+    const rtlLocales = {
+      'ar', // Arabic
+      'ur', // Urdu
+      'fa', // Persian/Farsi
+      'he', // Hebrew
+      'ps', // Pashto
+      'sd', // Sindhi
+      'ku', // Kurdish
+      'dv', // Divehi
+      'yi', // Yiddish
+    };
+
+    // Extract language code from locale (e.g., 'ar_SA' -> 'ar')
+    final languageCode = locale.split('_').first.split('-').first.toLowerCase();
+
+    return rtlLocales.contains(languageCode)
+        ? TextDirection.rtl
+        : TextDirection.ltr;
+  }
+
+  /// Formats the default value to maintain proper capitalization.
+  /// If the key starts with lowercase and default value starts with uppercase,
+  /// preserve the original formatting from the default value.
+  String _formatDefaultValue(String defaultValue, String key) {
+    // If we're showing the key itself and it's different from default value,
+    // try to maintain proper capitalization
+    if (defaultValue == key) {
+      return key;
+    }
+
+    // If default value exists and has proper capitalization, use it
+    return defaultValue;
   }
 
   /// Handles missing key diagnostics when a translation key is not found.
@@ -321,8 +415,7 @@ class LocalizationManager {
   }
 
   /// Compares two translation maps for equality.
-  bool _translationsEqual(
-      Map<String, dynamic> a, Map<String, dynamic> b) {
+  bool _translationsEqual(Map<String, dynamic> a, Map<String, dynamic> b) {
     if (a.length != b.length) return false;
 
     for (final key in a.keys) {

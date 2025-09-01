@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'localization_manager.dart';
 
 /// A debug overlay that displays missing translation keys.
-/// 
+///
 /// This widget is only shown in debug mode and when enabled via
 /// LocalizationManager configuration.
 class MissingKeyDebugOverlay extends StatefulWidget {
   final Widget child;
-  
+
   const MissingKeyDebugOverlay({super.key, required this.child});
-  
+
   @override
   State<MissingKeyDebugOverlay> createState() => _MissingKeyDebugOverlayState();
 }
@@ -19,39 +19,39 @@ class MissingKeyDebugOverlay extends StatefulWidget {
 class _MissingKeyDebugOverlayState extends State<MissingKeyDebugOverlay> {
   bool _isVisible = false;
   Set<String> _missingKeys = <String>{};
-  
+
   @override
   void initState() {
     super.initState();
     LocalizationManager.instance.addListener(_updateMissingKeys);
     _updateMissingKeys();
   }
-  
+
   @override
   void dispose() {
     LocalizationManager.instance.removeListener(_updateMissingKeys);
     super.dispose();
   }
-  
+
   void _updateMissingKeys() {
     if (mounted) {
       setState(() {
         _missingKeys = LocalizationManager.instance.missingKeys;
-        _isVisible = LocalizationManager.instance.showDebugOverlay && 
-                    _missingKeys.isNotEmpty;
+        _isVisible = LocalizationManager.instance.showDebugOverlay &&
+            _missingKeys.isNotEmpty;
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     if (!kDebugMode || !_isVisible) {
       return widget.child;
     }
-    
+
     // Check if we already have a Directionality ancestor
     final hasDirectionality = Directionality.maybeOf(context) != null;
-    
+
     Widget stackWidget = Stack(
       children: [
         widget.child,
@@ -130,7 +130,7 @@ class _MissingKeyDebugOverlayState extends State<MissingKeyDebugOverlay> {
         ),
       ],
     );
-    
+
     // Only wrap with Directionality if one doesn't already exist
     if (!hasDirectionality) {
       return Directionality(
@@ -138,7 +138,7 @@ class _MissingKeyDebugOverlayState extends State<MissingKeyDebugOverlay> {
         child: stackWidget,
       );
     }
-    
+
     return stackWidget;
   }
 }

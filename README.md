@@ -6,6 +6,8 @@
  
 ## Features
 
+- **Animated Localized Text**: Smooth animated transitions when locale changes with 5 animation types (rotation, scale, fade, slide, 3D rotation)
+- **Locale Persistence**: Automatically save and restore selected locale across app restarts using SharedPreferences
 - **Inline Localization**: Use `.localize()` method directly on strings with inline translations
 - **JSON-based Localization**: Use a simple JSON file for organized translations
 - **Parameter Interpolation**: Support for dynamic text with placeholders like `{name}` via args map
@@ -22,7 +24,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  localization_by_muz: ^1.0.4
+  localization_by_muz: ^1.0.5
 ```
 
 ## Usage
@@ -167,6 +169,72 @@ LocalizationProvider.setLocale(context, 'es'); // Switch to Spanish
 ```
 
 The UI will update instantly without requiring app restart or refresh!
+
+### Animated Localized Text
+
+New in v1.0.5! Use `AnimatedLocalizedText` for smooth animated transitions when locale changes:
+
+```dart
+import 'package:localization_by_muz/localization_by_muz.dart';
+
+// Basic animated text with rotation transition (default)
+AnimatedLocalizedText(
+  'welcome',
+  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+)
+
+// Different animation types
+AnimatedLocalizedText(
+  'hello',
+  transition: AnimatedLocalizedTextTransition.scale,
+  duration: Duration(milliseconds: 500),
+)
+
+AnimatedLocalizedText(
+  'goodbye',
+  transition: AnimatedLocalizedTextTransition.fade,
+  duration: Duration(milliseconds: 300),
+)
+
+AnimatedLocalizedText(
+  'title',
+  transition: AnimatedLocalizedTextTransition.slide,
+  duration: Duration(milliseconds: 400),
+)
+
+AnimatedLocalizedText(
+  'header',
+  transition: AnimatedLocalizedTextTransition.rotation3D,
+  duration: Duration(milliseconds: 600),
+)
+
+// With inline translations
+AnimatedLocalizedText(
+  'welcome',
+  translations: {
+    'en': 'Welcome!',
+    'fr': 'Bienvenue!',
+    'es': '¡Bienvenido!'
+  },
+  transition: AnimatedLocalizedTextTransition.rotation,
+  style: TextStyle(fontSize: 20),
+)
+```
+
+**Available Animation Types:**
+- `rotation` - Rotates text during transition (default)
+- `scale` - Scales text in/out during transition
+- `fade` - Fades text in/out during transition
+- `slide` - Slides text horizontally during transition
+- `rotation3D` - 3D Y-axis rotation effect during transition
+
+**Features:**
+- Smooth animations when locale changes
+- Customizable animation duration
+- Support for all text styling options
+- Works with both JSON-based and inline translations
+- Automatic RTL text direction support
+- Backward compatible with existing `LocalizedText` widget
 
 ### Parameter Interpolation
 
@@ -377,6 +445,8 @@ LocalizationProvider(
 
 ## Features Breakdown
 
+- **Animated localized text**: Smooth transitions with 5 animation types (rotation, scale, fade, slide, 3D rotation) when locale changes
+- **Locale persistence**: Automatic saving and restoring of selected locale across app restarts using SharedPreferences
 - **Two localization methods**: Choose between inline translations or JSON file approach
 - **Parameter interpolation**: Dynamic text with `{placeholder}` support via `.localizeArgs(args: {...})`
 - **Number/date formatting**: Built-in locale-aware formatting for numbers, currencies, percentages, dates, and times

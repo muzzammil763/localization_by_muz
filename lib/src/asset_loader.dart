@@ -19,7 +19,7 @@ abstract class AssetLoader {
   ///   }
   /// }
   /// ```
-  /// 
+  ///
   /// Or nested format for dotted keys:
   /// ```
   /// {
@@ -54,7 +54,8 @@ class DefaultAssetLoader implements AssetLoader {
       // Support both flat and nested structures
       return _processTranslationMap(jsonMap);
     } catch (e) {
-      debugPrint('Warning: Could not load localization file from $assetPath: $e');
+      debugPrint(
+          'Warning: Could not load localization file from $assetPath: $e');
       return {};
     }
   }
@@ -62,7 +63,7 @@ class DefaultAssetLoader implements AssetLoader {
   /// Processes the translation map to handle both flat and nested structures.
   Map<String, dynamic> _processTranslationMap(Map<String, dynamic> jsonMap) {
     final Map<String, dynamic> translations = {};
-    
+
     jsonMap.forEach((key, value) {
       if (value is Map<String, dynamic>) {
         // Check if this is a locale map (contains locale keys like 'en', 'fr')
@@ -74,18 +75,29 @@ class DefaultAssetLoader implements AssetLoader {
         }
       }
     });
-    
+
     return translations;
   }
 
   /// Checks if a map contains locale keys (simple heuristic).
   bool _isLocaleMap(Map<String, dynamic> map) {
     // Common locale codes to check for
-    const commonLocales = ['en', 'fr', 'es', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh'];
-    
+    const commonLocales = [
+      'en',
+      'fr',
+      'es',
+      'de',
+      'it',
+      'pt',
+      'ru',
+      'ja',
+      'ko',
+      'zh'
+    ];
+
     // If any key is a common locale and all values are strings, treat as locale map
     return map.keys.any((key) => commonLocales.contains(key)) &&
-           map.values.every((value) => value is String);
+        map.values.every((value) => value is String);
   }
 }
 
@@ -102,10 +114,10 @@ class DefaultAssetLoader implements AssetLoader {
 class PerLocaleAssetLoader implements AssetLoader {
   /// The base directory path containing locale files.
   final String basePath;
-  
+
   /// List of supported locale codes.
   final List<String> supportedLocales;
-  
+
   /// File extension for locale files.
   final String fileExtension;
 
@@ -136,7 +148,8 @@ class PerLocaleAssetLoader implements AssetLoader {
   }
 
   /// Merges locale data into the main translations structure.
-  void _mergeLocaleData(Map<String, dynamic> target, Map<String, dynamic> source, String locale) {
+  void _mergeLocaleData(
+      Map<String, dynamic> target, Map<String, dynamic> source, String locale) {
     source.forEach((key, value) {
       if (value is String) {
         // Handle flat keys

@@ -17,20 +17,20 @@ class LocalizationProvider extends StatefulWidget {
   final String defaultLocale;
 
   /// Custom asset loader for loading translations.
-  /// 
+  ///
   /// If not provided, defaults to [DefaultAssetLoader] which reads from
   /// 'lib/localization.json' for backward compatibility.
   final AssetLoader? assetLoader;
-  
+
   /// Whether to enable console logging for missing translation keys.
   final bool enableMissingKeyLogging;
-  
+
   /// Callback function called when a translation key is missing.
   final OnMissingKeyCallback? onMissingKey;
-  
+
   /// Whether to show debug overlay for missing keys (development only).
   final bool showDebugOverlay;
-  
+
   /// Whether to enable hot-reload for translations in debug mode.
   final bool enableHotReload;
 
@@ -59,6 +59,19 @@ class LocalizationProvider extends StatefulWidget {
   /// Widgets that depend on localization will rebuild automatically.
   static void setLocale(BuildContext context, String locale) {
     LocalizationManager.instance.setLocale(locale);
+  }
+
+  /// Gets the current text direction from the LocalizationManager.
+  ///
+  /// Returns TextDirection.rtl for RTL languages (Arabic, Urdu, Persian, Hebrew, etc.)
+  /// and TextDirection.ltr for all other languages.
+  static TextDirection getTextDirection(BuildContext context) {
+    return LocalizationManager.instance.textDirection;
+  }
+
+  /// Gets the current locale from the LocalizationManager.
+  static String getCurrentLocale(BuildContext context) {
+    return LocalizationManager.instance.currentLocale;
   }
 }
 
@@ -113,12 +126,12 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
       key: ValueKey<String>(_currentLocale),
       child: widget.child,
     );
-    
+
     // Wrap with debug overlay if enabled
     if (widget.showDebugOverlay) {
       child = MissingKeyDebugOverlay(child: child);
     }
-    
+
     return LocalizationInherited(
       locale: _currentLocale,
       isInitialized: _isInitialized,

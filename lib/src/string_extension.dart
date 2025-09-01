@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 import 'localization_manager.dart';
 
 /// Adds Localization Helpers To `String`.
@@ -64,5 +66,40 @@ extension LocalizationExtension on String {
     }
 
     return LocalizationManager.instance.translate(this, args: args);
+  }
+
+  /// Returns the current text direction for the active locale.
+  ///
+  /// This is useful when you need to know the directionality of the current locale
+  /// for custom widgets or layout decisions.
+  TextDirection get textDirection {
+    return LocalizationManager.instance.textDirection;
+  }
+
+  /// Returns a record containing both the localized text and its text direction.
+  ///
+  /// This is useful when you need both the translated text and its directionality
+  /// in a single call.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = "welcome".localizeWithDirection();
+  /// Text(
+  ///   result.text,
+  ///   textDirection: result.direction,
+  /// )
+  /// ```
+  ({String text, TextDirection direction}) localizeWithDirection([
+    Map<String, String>? translations,
+    Map<String, Object?>? args,
+  ]) {
+    final localizedText = translations != null
+        ? localizeArgs(translations: translations, args: args)
+        : localizeArgs(args: args);
+
+    return (
+      text: localizedText,
+      direction: LocalizationManager.instance.textDirection,
+    );
   }
 }

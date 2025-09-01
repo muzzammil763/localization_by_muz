@@ -8,6 +8,7 @@ import 'formatting_demo_screen.dart';
 import 'inline_example_screen.dart';
 import 'json_example_screen.dart';
 import 'language_selection_screen.dart';
+import 'rtl_demo_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -194,6 +195,33 @@ class HomeScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => const FormattingDemoScreen(),
+                          ),
+                        ),
+                      ),
+                      _buildNavigationCard(
+                        context,
+                        title: "RTL Demo".localize({
+                          "en": "RTL Demo",
+                          "fr": "Démo RTL",
+                          "es": "Demo RTL",
+                          "de": "RTL-Demo",
+                          "ar": "عرض RTL",
+                          "ur": "RTL ڈیمو",
+                        }),
+                        subtitle: "rtlDemoDesc".localize({
+                          "en": "Right-to-Left language support",
+                          "fr": "Support des langues de droite à gauche",
+                          "es": "Soporte de idiomas de derecha a izquierda",
+                          "de": "Unterstützung für Rechts-nach-Links-Sprachen",
+                          "ar": "دعم اللغات من اليمين إلى اليسار",
+                          "ur": "دائیں سے بائیں زبانوں کی سپورٹ",
+                        }),
+                        icon: Icons.format_textdirection_r_to_l,
+                        color: Colors.deepOrange,
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RTLDemoScreen(),
                           ),
                         ),
                       ),

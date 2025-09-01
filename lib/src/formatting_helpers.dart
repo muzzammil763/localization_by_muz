@@ -179,7 +179,8 @@ class FormattingHelpers {
     String? currencySymbol,
   }) {
     final symbol = currencySymbol ?? _getCurrencySymbol(currencyCode);
-    final formattedAmount = _formatNumberBasic(amount, locale, decimalPlaces: 2);
+    final formattedAmount =
+        _formatNumberBasic(amount, locale, decimalPlaces: 2);
 
     // Basic currency formatting based on locale
     switch (locale) {
@@ -290,8 +291,7 @@ class FormattingHelpers {
     if (kDebugMode) {
       debugPrint('Intl formatting not available, using basic formatting');
     }
-    return _formatPercentageBasic(value, locale,
-        decimalPlaces: decimalPlaces);
+    return _formatPercentageBasic(value, locale, decimalPlaces: decimalPlaces);
   }
 
   static String _formatDateWithIntl(

@@ -4,28 +4,32 @@
     "fr": "Démo de Localisation",
     "es": "Demo de Localización",
     "de": "Lokalisierungs-Demo",
-    "ar": "عرض التوطين"
+    "ar": "عرض التوطين",
+    "ur": "لوکلائزیشن ڈیمو"
   },
   "helloWorld": {
     "en": "Hello World",
     "fr": "Bonjour Le Monde",
     "es": "Hola Mundo",
     "de": "Hallo Welt",
-    "ar": "مرحبا بالعالم"
+    "ar": "مرحبا بالعالم",
+    "ur": "ہیلو ورلڈ"
   },
   "welcome": {
     "en": "Welcome to our app!",
     "fr": "Bienvenue dans notre application!",
     "es": "¡Bienvenido a nuestra aplicación!",
     "de": "Willkommen in unserer App!",
-    "ar": "مرحباً بك في تطبيقنا!"
+    "ar": "مرحباً بك في تطبيقنا!",
+    "ur": "ہماری ایپ میں خوش آمدید!"
   },
   "goodbye": {
     "en": "Goodbye! See you later",
     "fr": "Au revoir! À bientôt",
     "es": "¡Adiós! Hasta luego",
     "de": "Auf Wiedersehen! Bis später",
-    "ar": "وداعاً! أراك لاحقاً"
+    "ar": "وداعاً! أراك لاحقاً",
+    "ur": "الوداع! بعد میں ملتے ہیں"
   },
   "homeScreen": {
     "en": "Home Screen",
@@ -53,7 +57,8 @@
     "fr": "Sélection de langue",
     "es": "Selección de idioma",
     "de": "Sprachauswahl",
-    "ar": "اختيار اللغة"
+    "ar": "اختيار اللغة",
+    "ur": "زبان کا انتخاب"
   },
   "currentLanguage": {
     "en": "Current Language",
