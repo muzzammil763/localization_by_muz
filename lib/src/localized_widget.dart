@@ -201,7 +201,8 @@ class AnimatedLocalizedText extends StatelessWidget {
 
     // Create a unique key that changes whenever locale changes
     // This ensures AnimatedSwitcher always detects a change
-    final uniqueKey = ValueKey('${text}_${currentLocale}_${translations.hashCode}_${args.hashCode}');
+    final uniqueKey = ValueKey(
+        '${text}_${currentLocale}_${translations.hashCode}_${args.hashCode}');
 
     return AnimatedSwitcher(
       duration: duration,

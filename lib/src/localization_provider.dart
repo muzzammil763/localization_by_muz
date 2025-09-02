@@ -84,7 +84,6 @@ class LocalizationProvider extends StatefulWidget {
 class _LocalizationProviderState extends State<LocalizationProvider> {
   String _currentLocale = 'en';
   bool _isInitialized = false;
-  bool _isLocaleLoaded = false;
 
   @override
   void initState() {
@@ -92,24 +91,22 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
     _initializeLocaleSync();
     LocalizationManager.instance.addListener(_onLocaleChanged);
   }
-  
+
   /// Synchronously initializes locale when SharedPreferences are preloaded
   void _initializeLocaleSync() {
     // Get saved locale synchronously if SharedPreferences is already cached
-    String initialLocale = LocalizationManager.instance.getSavedLocaleSync() ?? widget.defaultLocale;
-    
+    String initialLocale = LocalizationManager.instance.getSavedLocaleSync() ??
+        widget.defaultLocale;
+
     // Set the determined locale immediately
     _currentLocale = initialLocale;
     LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
-    
+
     // Mark locale as loaded
-    _isLocaleLoaded = true;
-    
+
     // Initialize asynchronously in background
     _initialize();
   }
-  
-
 
   Future<void> _initialize() async {
     await LocalizationManager.instance.initialize(

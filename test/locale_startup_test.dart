@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('Locale Startup Behavior Tests', () {
@@ -10,7 +10,8 @@ void main() {
       LocalizationManager.instance.reset();
     });
 
-    testWidgets('should load saved locale immediately without flash of default content',
+    testWidgets(
+        'should load saved locale immediately without flash of default content',
         (WidgetTester tester) async {
       // Set up mock SharedPreferences with saved French locale
       SharedPreferences.setMockInitialValues({
@@ -22,20 +23,21 @@ void main() {
 
       // Debug: Check if saved locale is available
       final savedLocale = LocalizationManager.instance.getSavedLocaleSync();
-      print('Debug: Saved locale after preload: $savedLocale');
+      debugPrint('Debug: Saved locale after preload: $savedLocale');
 
       // Track locale changes during initialization
       final List<String> localeChanges = [];
-      
+
       await tester.pumpWidget(
         MaterialApp(
           home: LocalizationProvider(
             defaultLocale: 'en',
             child: Builder(
               builder: (context) {
-                final currentLocale = LocalizationProvider.getCurrentLocale(context);
+                final currentLocale =
+                    LocalizationProvider.getCurrentLocale(context);
                 localeChanges.add(currentLocale);
-                print('Debug: Current locale in builder: $currentLocale');
+                debugPrint('Debug: Current locale in builder: $currentLocale');
                 return Scaffold(
                   body: Text('Current locale: $currentLocale'),
                 );
@@ -50,12 +52,12 @@ void main() {
 
       // Verify that the saved locale (fr) was used from the start
       // There should be no flash of default locale (en)
-      expect(localeChanges.first, equals('fr'), 
-        reason: 'Should start with saved locale, not default locale');
-      
+      expect(localeChanges.first, equals('fr'),
+          reason: 'Should start with saved locale, not default locale');
+
       // Verify final locale is correct
       expect(LocalizationManager.instance.currentLocale, equals('fr'));
-      
+
       // Find the text widget and verify it shows the correct locale
       expect(find.text('Current locale: fr'), findsOneWidget);
     });
@@ -71,7 +73,8 @@ void main() {
             defaultLocale: 'de',
             child: Builder(
               builder: (context) {
-                final currentLocale = LocalizationProvider.getCurrentLocale(context);
+                final currentLocale =
+                    LocalizationProvider.getCurrentLocale(context);
                 return Scaffold(
                   body: Text('Current locale: $currentLocale'),
                 );
@@ -92,14 +95,15 @@ void main() {
     testWidgets('should handle SharedPreferences loading errors gracefully',
         (WidgetTester tester) async {
       // Don't set mock values to simulate SharedPreferences error
-      
+
       await tester.pumpWidget(
         MaterialApp(
           home: LocalizationProvider(
             defaultLocale: 'en',
             child: Builder(
               builder: (context) {
-                final currentLocale = LocalizationProvider.getCurrentLocale(context);
+                final currentLocale =
+                    LocalizationProvider.getCurrentLocale(context);
                 return Scaffold(
                   body: Text('Current locale: $currentLocale'),
                 );
@@ -121,7 +125,7 @@ void main() {
         (WidgetTester tester) async {
       // Simulate first app run - save a locale
       SharedPreferences.setMockInitialValues({});
-      
+
       await tester.pumpWidget(
         MaterialApp(
           home: LocalizationProvider(
@@ -130,7 +134,8 @@ void main() {
               builder: (context) {
                 return Scaffold(
                   body: ElevatedButton(
-                    onPressed: () => LocalizationProvider.setLocale(context, 'es'),
+                    onPressed: () =>
+                        LocalizationProvider.setLocale(context, 'es'),
                     child: Text('Switch to Spanish'),
                   ),
                 );
@@ -141,52 +146,56 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      
+
       // Switch to Spanish
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
-      
+
       expect(LocalizationManager.instance.currentLocale, equals('es'));
-      
+
       // Get the current SharedPreferences state to preserve it
       final prefs = await SharedPreferences.getInstance();
       final savedLocale = prefs.getString('localization_by_muz_locale');
       expect(savedLocale, equals('es')); // Verify it was saved
-      
+
       // Simulate app restart by resetting and setting up mock with saved locale
       LocalizationManager.instance.reset();
-      
+
       // Set mock values BEFORE creating LocalizationProvider
       SharedPreferences.setMockInitialValues({
         'localization_by_muz_locale': savedLocale!,
       });
-      
+
       // Preload to ensure mock values are available
       await LocalizationProvider.preloadSharedPreferences();
-      
+
       // Debug: Check if saved locale is available after restart
-      final savedLocaleAfterRestart = LocalizationManager.instance.getSavedLocaleSync();
-      print('Debug: Saved locale after restart: $savedLocaleAfterRestart');
-      
+      final savedLocaleAfterRestart =
+          LocalizationManager.instance.getSavedLocaleSync();
+      debugPrint('Debug: Saved locale after restart: $savedLocaleAfterRestart');
+
       // Reset LocalizationManager to simulate fresh app start
       LocalizationManager.instance.reset();
-      
+
       // Preload SharedPreferences again to ensure mock values are available
       await LocalizationProvider.preloadSharedPreferences();
-      
+
       // Now check if the saved locale is properly loaded
-      final finalSavedLocale = LocalizationManager.instance.getSavedLocaleSync();
-      print('Debug: Final saved locale after reset and preload: $finalSavedLocale');
-      
+      final finalSavedLocale =
+          LocalizationManager.instance.getSavedLocaleSync();
+      debugPrint(
+          'Debug: Final saved locale after reset and preload: $finalSavedLocale');
+
       // Initialize LocalizationManager with the saved locale
       await LocalizationManager.instance.initialize(
         defaultLocale: finalSavedLocale ?? 'en',
       );
-      
+
       // Verify the locale is maintained after restart
-      final currentLocaleAfterRestart = LocalizationManager.instance.currentLocale;
-      print('Debug: Final current locale: $currentLocaleAfterRestart');
-      
+      final currentLocaleAfterRestart =
+          LocalizationManager.instance.currentLocale;
+      debugPrint('Debug: Final current locale: $currentLocaleAfterRestart');
+
       expect(currentLocaleAfterRestart, equals(savedLocale));
     });
 
@@ -195,13 +204,13 @@ void main() {
       SharedPreferences.setMockInitialValues({
         'localization_by_muz_locale': 'ar',
       });
-      
+
       // Before preloading, sync method should return null
       expect(LocalizationManager.instance.getSavedLocaleSync(), isNull);
-      
+
       // Preload SharedPreferences
       await LocalizationManager.instance.preloadSharedPreferences();
-      
+
       // Now sync method should return the saved locale
       expect(LocalizationManager.instance.getSavedLocaleSync(), equals('ar'));
     });

@@ -36,7 +36,7 @@ class LocalizationManager {
 
   /// SharedPreferences key for storing locale
   static const String _localeKey = 'localization_by_muz_locale';
-  
+
   /// Cached SharedPreferences instance for synchronous access
   SharedPreferences? _cachedPrefs;
 
@@ -195,7 +195,7 @@ class LocalizationManager {
       return null;
     }
   }
-  
+
   /// Preloads SharedPreferences for synchronous access.
   /// Call this early in app startup to enable synchronous locale loading.
   Future<void> preloadSharedPreferences() async {
@@ -205,7 +205,7 @@ class LocalizationManager {
       debugPrint('Warning: Could not preload SharedPreferences: $e');
     }
   }
-  
+
   /// Gets the saved locale synchronously if SharedPreferences is already loaded.
   /// Returns null if SharedPreferences is not yet loaded or no locale is saved.
   String? getSavedLocaleSync() {
@@ -216,10 +216,10 @@ class LocalizationManager {
       return null;
     }
   }
-  
+
   /// Returns true if SharedPreferences is already cached.
   bool get isSharedPreferencesCached => _cachedPrefs != null;
-  
+
   /// Sets the current locale synchronously without full initialization.
   /// Used by LocalizationProvider to ensure immediate locale availability.
   void setCurrentLocaleSync(String locale) {
