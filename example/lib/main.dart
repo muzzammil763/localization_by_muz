@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 import 'package:localization_example/screens/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 

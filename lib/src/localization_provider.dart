@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import 'asset_loader.dart';
 import 'localization_manager.dart';
@@ -84,47 +84,34 @@ class LocalizationProvider extends StatefulWidget {
 class _LocalizationProviderState extends State<LocalizationProvider> {
   String _currentLocale = 'en';
   bool _isInitialized = false;
+  bool _isLocaleLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _currentLocale = LocalizationManager.instance.getSavedLocaleSync() ?? widget.defaultLocale;
-    _initializeManagerSync();
-    _initializeLocale();
+    _initializeLocaleSync();
     LocalizationManager.instance.addListener(_onLocaleChanged);
   }
   
-  void _initializeManagerSync() {
-    // Set the LocalizationManager's current locale immediately
-    // This ensures getCurrentLocale() returns the correct value from the start
+  /// Synchronously initializes locale when SharedPreferences are preloaded
+  void _initializeLocaleSync() {
+    // Get saved locale synchronously if SharedPreferences is already cached
+    String initialLocale = LocalizationManager.instance.getSavedLocaleSync() ?? widget.defaultLocale;
+    
+    // Set the determined locale immediately
+    _currentLocale = initialLocale;
     LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
+    
+    // Mark locale as loaded
+    _isLocaleLoaded = true;
+    
+    // Initialize asynchronously in background
+    _initialize();
   }
   
-  void _initializeLocale() async {
-    // Only preload if not already cached to avoid overwriting mock values in tests
-    if (!LocalizationManager.instance.isSharedPreferencesCached) {
-      await LocalizationManager.instance.preloadSharedPreferences();
-    }
-    
-    // Check for saved locale after preloading
-    final savedLocale = LocalizationManager.instance.getSavedLocaleSync();
-    
-    if (savedLocale != null && savedLocale != _currentLocale) {
-      setState(() {
-        _currentLocale = savedLocale;
-      });
-      // Update LocalizationManager with the saved locale
-      LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
-    }
-    
-    // Continue with full initialization
-    _initialize();
-    
-    // Re-set the locale after initialization to ensure it's not overwritten
-    LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
-  }
 
-  void _initialize() async {
+
+  Future<void> _initialize() async {
     await LocalizationManager.instance.initialize(
       defaultLocale: _currentLocale, // Use the already determined locale
       assetLoader: widget.assetLoader,
