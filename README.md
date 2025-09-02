@@ -6,6 +6,7 @@
  
 ## Features
 
+- **Navigation Preservation**: Navigation stack is preserved when changing locale - no more losing your place in the app!
 - **Animated Localized Text**: Smooth animated transitions when locale changes with 5 animation types (rotation, scale, fade, slide, 3D rotation)
 - **Locale Persistence**: Automatically save and restore selected locale across app restarts using SharedPreferences
 - **Inline Localization**: Use `.localize()` method directly on strings with inline translations
@@ -24,7 +25,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  localization_by_muz: ^1.0.5
+  localization_by_muz: ^1.0.6
 ```
 
 ## Usage

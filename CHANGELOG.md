@@ -1,3 +1,11 @@
+## 1.0.6
+
+- Fix navigation stack reset issue when changing locale by removing KeyedSubtree from LocalizationProvider
+- Improve AnimatedLocalizedText property naming for better consistency
+- Enhance navigation preservation during locale changes for better user experience
+- Update test coverage for navigation preservation scenarios
+- Maintain backward compatibility with existing localization functionality
+
 ## 1.0.5
 
 - Add `AnimatedLocalizedText` widget with smooth transition animations for locale changes
