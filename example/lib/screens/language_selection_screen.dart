@@ -42,12 +42,7 @@ class LanguageSelectionScreen extends StatelessWidget {
             'nativeName': 'العربية',
             'flag': '🇸🇦',
           },
-          {
-            'code': 'ur',
-            'name': 'Urdu',
-            'nativeName': 'اردو',
-            'flag': '🇵🇰',
-          },
+          {'code': 'ur', 'name': 'Urdu', 'nativeName': 'اردو', 'flag': '🇵🇰'},
         ];
 
         return Scaffold(
@@ -68,12 +63,16 @@ class LanguageSelectionScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          Text(
+                          AnimatedLocalizedText(
                             "currentLanguage".localize(),
                             style: Theme.of(context).textTheme.titleMedium,
+                            transitionType:
+                                AnimatedLocalizedTextTransition.scale,
                           ),
                           const SizedBox(height: 8),
-                          Text(
+                          AnimatedLocalizedText(
+                            transitionType:
+                                AnimatedLocalizedTextTransition.scale,
                             languages.firstWhere(
                               (lang) => lang['code'] == currentLocale,
                             )['nativeName']!,
@@ -118,7 +117,8 @@ class LanguageSelectionScreen extends StatelessWidget {
                                   "Los cambios de idioma surten efecto inmediatamente",
                               "de": "Sprachänderungen werden sofort wirksam",
                               "ar": "تغييرات اللغة تدخل حيز التنفيذ فوراً",
-                              "ur": "زبان کی تبدیلیاں فوری طور پر مؤثر ہوتی ہیں",
+                              "ur":
+                                  "زبان کی تبدیلیاں فوری طور پر مؤثر ہوتی ہیں",
                             }),
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,

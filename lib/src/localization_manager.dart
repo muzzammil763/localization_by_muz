@@ -36,6 +36,9 @@ class LocalizationManager {
 
   /// SharedPreferences key for storing locale
   static const String _localeKey = 'localization_by_muz_locale';
+  
+  /// Cached SharedPreferences instance for synchronous access
+  SharedPreferences? _cachedPrefs;
 
   // Missing key diagnostics
   bool _enableMissingKeyLogging = false;
@@ -104,8 +107,14 @@ class LocalizationManager {
   }) async {
     if (_isInitialized) return;
 
-    // Load saved locale from SharedPreferences, fallback to defaultLocale
-    _currentLocale = await _loadSavedLocale() ?? defaultLocale;
+    // If SharedPreferences is already cached, use the provided defaultLocale
+    // (which should already be the correct saved locale from LocalizationProvider)
+    // Otherwise, load saved locale from SharedPreferences
+    if (_cachedPrefs != null) {
+      _currentLocale = defaultLocale;
+    } else {
+      _currentLocale = await _loadSavedLocale() ?? defaultLocale;
+    }
     _assetLoader = assetLoader ?? const DefaultAssetLoader();
 
     // Set missing key diagnostics options
@@ -137,6 +146,8 @@ class LocalizationManager {
     _translations.clear();
     _listeners.clear();
     _assetLoader = null;
+    _cachedPrefs = null; // Clear cached SharedPreferences
+    _cachedTextDirection = null; // Clear cached text direction
 
     // Reset missing key diagnostics
     _enableMissingKeyLogging = false;
@@ -177,17 +188,49 @@ class LocalizationManager {
   Future<String?> _loadSavedLocale() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      _cachedPrefs = prefs; // Cache for synchronous access
       return prefs.getString(_localeKey);
     } catch (e) {
       debugPrint('Warning: Could not load saved locale: $e');
       return null;
     }
   }
+  
+  /// Preloads SharedPreferences for synchronous access.
+  /// Call this early in app startup to enable synchronous locale loading.
+  Future<void> preloadSharedPreferences() async {
+    try {
+      _cachedPrefs = await SharedPreferences.getInstance();
+    } catch (e) {
+      debugPrint('Warning: Could not preload SharedPreferences: $e');
+    }
+  }
+  
+  /// Gets the saved locale synchronously if SharedPreferences is already loaded.
+  /// Returns null if SharedPreferences is not yet loaded or no locale is saved.
+  String? getSavedLocaleSync() {
+    try {
+      return _cachedPrefs?.getString(_localeKey);
+    } catch (e) {
+      debugPrint('Warning: Could not get saved locale synchronously: $e');
+      return null;
+    }
+  }
+  
+  /// Returns true if SharedPreferences is already cached.
+  bool get isSharedPreferencesCached => _cachedPrefs != null;
+  
+  /// Sets the current locale synchronously without full initialization.
+  /// Used by LocalizationProvider to ensure immediate locale availability.
+  void setCurrentLocaleSync(String locale) {
+    _currentLocale = locale;
+  }
 
   /// Saves the current locale to SharedPreferences.
   Future<void> _saveLocale(String locale) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = _cachedPrefs ?? await SharedPreferences.getInstance();
+      _cachedPrefs = prefs; // Cache for future use
       await prefs.setString(_localeKey, locale);
     } catch (e) {
       debugPrint('Warning: Could not save locale: $e');

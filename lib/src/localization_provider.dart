@@ -45,6 +45,12 @@ class LocalizationProvider extends StatefulWidget {
     this.enableHotReload = false,
   });
 
+  /// Preloads SharedPreferences to enable immediate locale loading.
+  /// Call this before creating LocalizationProvider for best performance.
+  static Future<void> preloadSharedPreferences() async {
+    await LocalizationManager.instance.preloadSharedPreferences();
+  }
+
   @override
   State<LocalizationProvider> createState() => _LocalizationProviderState();
 
@@ -82,16 +88,45 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
   @override
   void initState() {
     super.initState();
-    // Ensure the inherited widget exposes the requested default locale
-    // immediately, even before async initialization completes.
-    _currentLocale = widget.defaultLocale;
-    _initialize();
+    _currentLocale = LocalizationManager.instance.getSavedLocaleSync() ?? widget.defaultLocale;
+    _initializeManagerSync();
+    _initializeLocale();
     LocalizationManager.instance.addListener(_onLocaleChanged);
+  }
+  
+  void _initializeManagerSync() {
+    // Set the LocalizationManager's current locale immediately
+    // This ensures getCurrentLocale() returns the correct value from the start
+    LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
+  }
+  
+  void _initializeLocale() async {
+    // Only preload if not already cached to avoid overwriting mock values in tests
+    if (!LocalizationManager.instance.isSharedPreferencesCached) {
+      await LocalizationManager.instance.preloadSharedPreferences();
+    }
+    
+    // Check for saved locale after preloading
+    final savedLocale = LocalizationManager.instance.getSavedLocaleSync();
+    
+    if (savedLocale != null && savedLocale != _currentLocale) {
+      setState(() {
+        _currentLocale = savedLocale;
+      });
+      // Update LocalizationManager with the saved locale
+      LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
+    }
+    
+    // Continue with full initialization
+    _initialize();
+    
+    // Re-set the locale after initialization to ensure it's not overwritten
+    LocalizationManager.instance.setCurrentLocaleSync(_currentLocale);
   }
 
   void _initialize() async {
     await LocalizationManager.instance.initialize(
-      defaultLocale: widget.defaultLocale,
+      defaultLocale: _currentLocale, // Use the already determined locale
       assetLoader: widget.assetLoader,
       enableMissingKeyLogging: widget.enableMissingKeyLogging,
       onMissingKey: widget.onMissingKey,
@@ -100,8 +135,8 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
     );
     if (mounted) {
       setState(() {
-        _currentLocale = LocalizationManager.instance.currentLocale;
         _isInitialized = true;
+        // No need to update _currentLocale again as it's already set correctly
       });
     }
   }
@@ -122,10 +157,7 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = KeyedSubtree(
-      key: ValueKey<String>(_currentLocale),
-      child: widget.child,
-    );
+    Widget child = widget.child;
 
     // Wrap with debug overlay if enabled
     if (widget.showDebugOverlay) {

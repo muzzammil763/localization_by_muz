@@ -199,6 +199,10 @@ class AnimatedLocalizedText extends StatelessWidget {
 
     final textDirection = LocalizationManager.instance.textDirection;
 
+    // Create a unique key that changes whenever locale changes
+    // This ensures AnimatedSwitcher always detects a change
+    final uniqueKey = ValueKey('${text}_${currentLocale}_${translations.hashCode}_${args.hashCode}');
+
     return AnimatedSwitcher(
       duration: duration,
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -206,7 +210,7 @@ class AnimatedLocalizedText extends StatelessWidget {
       },
       child: Text(
         localizedText,
-        key: ValueKey('${currentLocale}_$localizedText'),
+        key: uniqueKey,
         style: style,
         textAlign: textAlign,
         maxLines: maxLines,
