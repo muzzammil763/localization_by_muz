@@ -1,13 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'asset_loader.dart';
-
-/// Callback function type for handling missing translation keys.
-typedef OnMissingKeyCallback = void Function(String key, String locale);
 
 /// Manages loading translations and resolving localized strings.
 ///
@@ -41,15 +37,7 @@ class LocalizationManager {
   SharedPreferences? _cachedPrefs;
 
   // Missing key diagnostics
-  bool _enableMissingKeyLogging = false;
-  OnMissingKeyCallback? _onMissingKey;
   final Set<String> _missingKeys = <String>{};
-  bool _showDebugOverlay = false;
-
-  // Hot-reload functionality
-  bool _enableHotReload = false;
-  Timer? _hotReloadTimer;
-  Map<String, dynamic> _lastTranslations = {};
 
   /// The currently selected locale code (e.g. `en`, `fr`).
   String get currentLocale => _currentLocale;
@@ -65,20 +53,8 @@ class LocalizationManager {
   /// Whether the manager has been initialized.
   bool get isInitialized => _isInitialized;
 
-  /// Whether missing key logging is enabled.
-  bool get enableMissingKeyLogging => _enableMissingKeyLogging;
-
-  /// Whether debug overlay for missing keys is enabled.
-  bool get showDebugOverlay => _showDebugOverlay;
-
-  /// Whether hot-reload for translations is enabled.
-  bool get enableHotReload => _enableHotReload;
-
   /// Set of missing translation keys that have been encountered.
   Set<String> get missingKeys => Set.unmodifiable(_missingKeys);
-
-  /// Current missing key callback function.
-  OnMissingKeyCallback? get onMissingKey => _onMissingKey;
 
   /// Initializes the manager and loads translations from JSON.
   ///
@@ -91,19 +67,10 @@ class LocalizationManager {
   /// Provide a custom [assetLoader] to use alternative loading strategies.
   /// If not provided, defaults to [DefaultAssetLoader] with 'lib/localization.json'.
   ///
-  /// Missing key diagnostics options:
-  /// - [enableMissingKeyLogging]: Enable console logging for missing keys
-  /// - [onMissingKey]: Callback function called when a key is missing
-  /// - [showDebugOverlay]: Show debug overlay for missing keys (development only)
-  /// - [enableHotReload]: Enable automatic reloading of translations in debug mode
   Future<void> initialize({
     String defaultLocale = 'en',
     bool skipAssetLoading = false,
     AssetLoader? assetLoader,
-    bool enableMissingKeyLogging = false,
-    OnMissingKeyCallback? onMissingKey,
-    bool showDebugOverlay = false,
-    bool enableHotReload = false,
   }) async {
     if (_isInitialized) return;
 
@@ -117,22 +84,8 @@ class LocalizationManager {
     }
     _assetLoader = assetLoader ?? const DefaultAssetLoader();
 
-    // Set missing key diagnostics options
-    _enableMissingKeyLogging = enableMissingKeyLogging;
-    _onMissingKey = onMissingKey;
-    _showDebugOverlay = showDebugOverlay && kDebugMode;
-
-    // Set hot-reload option (only works in debug mode)
-    _enableHotReload = enableHotReload && kDebugMode;
-
     if (!skipAssetLoading) {
       await _loadTranslations();
-      _lastTranslations = Map.from(_translations);
-
-      // Start hot-reload timer if enabled
-      if (_enableHotReload) {
-        _startHotReloadTimer();
-      }
     } else {
       _translations = {};
     }
@@ -150,16 +103,7 @@ class LocalizationManager {
     _cachedTextDirection = null; // Clear cached text direction
 
     // Reset missing key diagnostics
-    _enableMissingKeyLogging = false;
-    _onMissingKey = null;
     _missingKeys.clear();
-    _showDebugOverlay = false;
-
-    // Reset hot-reload
-    _enableHotReload = false;
-    _hotReloadTimer?.cancel();
-    _hotReloadTimer = null;
-    _lastTranslations.clear();
   }
 
   Future<void> _loadTranslations() async {
@@ -391,88 +335,12 @@ class LocalizationManager {
     // Add to missing keys set
     _missingKeys.add(key);
 
-    // Log if enabled
-    if (_enableMissingKeyLogging) {
-      debugPrint(
-          'Missing translation key: "$key" for locale "$_currentLocale"');
-    }
-
-    ///// Call callback if provided
-    _onMissingKey?.call(key, _currentLocale);
-  }
-
-  /// Configures missing key diagnostics at runtime.
-  void configureMissingKeyDiagnostics({
-    bool? enableLogging,
-    OnMissingKeyCallback? onMissingKey,
-    bool? showDebugOverlay,
-  }) {
-    if (enableLogging != null) {
-      _enableMissingKeyLogging = enableLogging;
-    }
-    if (onMissingKey != null) {
-      _onMissingKey = onMissingKey;
-    }
-    if (showDebugOverlay != null) {
-      _showDebugOverlay = showDebugOverlay && kDebugMode;
-    }
+    // Missing key tracked for diagnostics
   }
 
   /// Clears the set of missing keys that have been tracked.
   void clearMissingKeys() {
     _missingKeys.clear();
-  }
-
-  /// Starts the hot-reload timer to periodically check for translation changes.
-  void _startHotReloadTimer() {
-    if (!kDebugMode || !_enableHotReload) return;
-
-    _hotReloadTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      _checkForTranslationChanges();
-    });
-
-    debugPrint(
-        '🔥 Hot-reload enabled for translations (checking every 2 seconds)');
-  }
-
-  /// Checks if translations have changed and reloads them if necessary.
-  Future<void> _checkForTranslationChanges() async {
-    if (!_enableHotReload || _assetLoader == null) return;
-
-    try {
-      final newTranslations = await _assetLoader!.loadTranslations();
-
-      // Compare with last known translations
-      if (!_translationsEqual(_lastTranslations, newTranslations)) {
-        debugPrint('🔄 Translation changes detected, reloading...');
-        _translations = newTranslations;
-        _lastTranslations = Map.from(newTranslations);
-        _notifyListeners();
-        debugPrint('✅ Translations reloaded successfully');
-      }
-    } catch (e) {
-      debugPrint('⚠️ Hot-reload failed: $e');
-    }
-  }
-
-  /// Compares two translation maps for equality.
-  bool _translationsEqual(Map<String, dynamic> a, Map<String, dynamic> b) {
-    if (a.length != b.length) return false;
-
-    for (final key in a.keys) {
-      if (!b.containsKey(key)) return false;
-
-      final mapA = a[key]!;
-      final mapB = b[key]!;
-
-      if (mapA.length != mapB.length) return false;
-
-      for (final subKey in mapA.keys) {
-        if (mapA[subKey] != mapB[subKey]) return false;
-      }
-    }
-
-    return true;
   }
 
   final List<VoidCallback> _listeners = [];

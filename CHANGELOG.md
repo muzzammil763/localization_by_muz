@@ -1,3 +1,76 @@
+## 2.0.0
+
+**BREAKING CHANGES:**
+
+- **Removed inline translation support**: The `translations` parameter has been removed from `LocalizedText` and `AnimatedLocalizedText` widgets. Use JSON-based localization exclusively.
+- **Removed deprecated LocalizationManager parameters**: 
+  - `enableMissingKeyLogging` parameter removed from `LocalizationManager.initialize()`
+  - `onMissingKey` callback parameter removed from `LocalizationManager.initialize()`
+- **Removed deprecated LocalizationProvider parameters**:
+  - `defaultLocale` parameter removed from `LocalizationProvider` constructor
+  - `showDebugOverlay` parameter removed from `LocalizationProvider` constructor
+  - `enableMissingKeyLogging` parameter removed from `LocalizationProvider` constructor
+  - `onMissingKey` parameter removed from `LocalizationProvider` constructor
+- **Removed unused internal methods**: `_translationsEqual` method removed from LocalizationManager
+- **Removed debug overlay functionality**: Complete removal of `MissingKeyDebugOverlay` widget and all related debug overlay features
+
+**Migration Guide:**
+
+1. **Update LocalizationManager initialization**:
+   ```dart
+   // Before (v1.x)
+   LocalizationProvider(
+     defaultLocale: 'en',
+     showDebugOverlay: true,
+     enableMissingKeyLogging: true,
+     child: MyApp(),
+   )
+   
+   // After (v2.0)
+   void main() async {
+     await LocalizationManager.initialize(
+       defaultLocale: 'en',
+       showDebugOverlay: true,
+     );
+     runApp(MyApp());
+   }
+   
+   LocalizationProvider(
+     child: MyApp(),
+   )
+   ```
+
+2. **Replace inline translations with JSON keys**:
+   ```dart
+   // Before (v1.x)
+   LocalizedText(
+     "greeting",
+     translations: {
+       "en": "Hello {name}!",
+       "fr": "Bonjour {name}!"
+     },
+     args: {"name": "John"}
+   )
+   
+   // After (v2.0) - Add to localization.json:
+   // {
+   //   "greeting": {
+   //     "en": "Hello {name}!",
+   //     "fr": "Bonjour {name}!"
+   //   }
+   // }
+   LocalizedText(
+     "greeting",
+     args: {"name": "John"}
+   )
+   ```
+
+**Improvements:**
+- Simplified API with consistent JSON-based approach
+- Updated documentation with complete working examples
+- Enhanced package description to reflect JSON-only localization
+- Improved example app demonstrating best practices
+
 ## 1.0.6
 
 - Fix navigation stack reset issue when changing locale by removing KeyedSubtree from LocalizationProvider

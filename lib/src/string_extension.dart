@@ -2,69 +2,45 @@ import 'package:flutter/widgets.dart';
 
 import 'localization_manager.dart';
 
-/// Adds Localization Helpers To `String`.
+/// Adds JSON-based localization helpers to `String`.
 ///
-/// - When [translations] Are Provided, The String Is Treated As The Default
-///   Text And The Map Contains Per-Locale Overrides (e.g. `{ 'en': 'Hello' }`).
-/// - When [translations] Is Omitted, The String Is Treated As A Translation
-///   Key That Will Be Looked Up From `lib/localization.json` Via
-///   [LocalizationManager].
+/// The string is treated as a translation key that will be looked up from
+/// `lib/localization.json` via [LocalizationManager].
 extension LocalizationExtension on String {
-  /// Returns the localized value for this string.
+  /// Returns the localized value for this string key.
   ///
-  /// If [translations] is provided, the current app locale is used to pick the
-  /// value from the map; if the locale is missing, the original string is
-  /// returned as a sensible fallback.
+  /// The string is interpreted as a translation key and resolved using
+  /// [LocalizationManager.translate] from the JSON file.
   ///
-  /// If [translations] is `null`, the string is interpreted as a translation
-  /// key and resolved using [LocalizationManager.translate].
-  ///
-  /// Example (inline):
-  /// ```dart
-  /// Text('Welcome'.localize({ 'en': 'Welcome', 'fr': 'Bienvenue' }));
-  /// ```
-  ///
-  /// Example (JSON key):
+  /// Example:
   /// ```dart
   /// Text('welcome'.localize());
   /// ```
-  String localize([Map<String, String>? translations]) {
-    if (translations != null) {
-      final currentLocale = LocalizationManager.instance.currentLocale;
-      return translations[currentLocale] ?? this;
+  String localize() {
+    // Return empty string until LocalizationManager is fully initialized
+    // This prevents showing the key before the translation is loaded
+    if (!LocalizationManager.instance.isInitialized) {
+      return '';
     }
-
     return LocalizationManager.instance.translate(this);
   }
 
-  /// Returns the localized value for this string with parameter interpolation.
+  /// Returns the localized value for this string key with parameter interpolation.
   ///
-  /// This is a non-breaking companion to [localize] that adds support for
-  /// replacing `{param}` placeholders with values provided in [args].
+  /// Supports replacing `{param}` placeholders with values provided in [args].
+  /// The string is treated as a JSON key and resolved via [LocalizationManager.translate].
+  /// Missing args leave their placeholders unchanged.
   ///
-  /// - If [translations] is provided, the current locale value is selected
-  ///   from the map and placeholders are substituted using [args].
-  /// - If [translations] is omitted, the string is treated as a JSON key and
-  ///   resolved via [LocalizationManager.translate] with [args].
-  /// - Missing args leave their placeholders unchanged.
-  String localizeArgs({
-    Map<String, String>? translations,
-    Map<String, Object?>? args,
-  }) {
-    if (translations != null) {
-      final currentLocale = LocalizationManager.instance.currentLocale;
-      final value = translations[currentLocale] ?? this;
-      if (args == null || args.isEmpty) return value;
-
-      final regExp = RegExp(r'\{(\w+)\}');
-      return value.replaceAllMapped(regExp, (match) {
-        final key = match.group(1)!;
-        final val = args[key];
-        if (val == null) return match.group(0)!;
-        return val.toString();
-      });
+  /// Example:
+  /// ```dart
+  /// Text('welcome_user'.localizeArgs(args: {'name': 'John'}));
+  /// ```
+  String localizeArgs({Map<String, Object?>? args}) {
+    // Return empty string until LocalizationManager is fully initialized
+    // This prevents showing the key before the translation is loaded
+    if (!LocalizationManager.instance.isInitialized) {
+      return '';
     }
-
     return LocalizationManager.instance.translate(this, args: args);
   }
 
@@ -73,6 +49,10 @@ extension LocalizationExtension on String {
   /// This is useful when you need to know the directionality of the current locale
   /// for custom widgets or layout decisions.
   TextDirection get textDirection {
+    // Return default LTR direction until LocalizationManager is fully initialized
+    if (!LocalizationManager.instance.isInitialized) {
+      return TextDirection.ltr;
+    }
     return LocalizationManager.instance.textDirection;
   }
 
@@ -89,17 +69,15 @@ extension LocalizationExtension on String {
   ///   textDirection: result.direction,
   /// )
   /// ```
-  ({String text, TextDirection direction}) localizeWithDirection([
-    Map<String, String>? translations,
+  ({String text, TextDirection direction}) localizeWithDirection({
     Map<String, Object?>? args,
-  ]) {
-    final localizedText = translations != null
-        ? localizeArgs(translations: translations, args: args)
-        : localizeArgs(args: args);
+  }) {
+    final localizedText = localizeArgs(args: args);
 
     return (
       text: localizedText,
-      direction: LocalizationManager.instance.textDirection,
+      direction:
+          textDirection, // Use the extension's textDirection getter which handles initialization
     );
   }
 }

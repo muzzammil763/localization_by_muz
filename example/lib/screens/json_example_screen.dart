@@ -9,14 +9,6 @@ class JsonExampleScreen extends StatefulWidget {
 }
 
 class _JsonExampleScreenState extends State<JsonExampleScreen> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   Widget _localeButton({
     required String code,
     required String currentLocale,
@@ -73,29 +65,12 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "What is JSON Localization?".localize({
-                              "en": "What is JSON Localization?",
-                              "fr": "Qu'est-ce que la localisation JSON?",
-                              "es": "¿Qué es la localización JSON?",
-                              "de": "Was ist JSON-Lokalisierung?",
-                              "ar": "ما هي ترجمة JSON؟",
-                            }),
+                            "whatIsJsonLocalization".localize(),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            "JSON localization uses a localization.json file in your lib/ directory to store all translations. Simply use .localize() on a key string.".localize({
-                              "en":
-                                  "JSON localization uses a localization.json file in your lib/ directory to store all translations. Simply use .localize() on a key string.",
-                              "fr":
-                                  "La localisation JSON utilise un fichier localization.json dans votre répertoire lib/ pour stocker toutes les traductions. Utilisez simplement .localize() sur une chaîne de clé.",
-                              "es":
-                                  "La localización JSON usa un archivo localization.json en tu directorio lib/ para almacenar todas las traducciones. Simplemente usa .localize() en una cadena clave.",
-                              "de":
-                                  "JSON-Lokalisierung verwendet eine localization.json-Datei in Ihrem lib/-Verzeichnis, um alle Übersetzungen zu speichern. Verwenden Sie einfach .localize() auf einem Schlüssel-String.",
-                              "ar":
-                                  "تستخدم ترجمة JSON ملف localization.json في دليل lib/ لتخزين جميع الترجمات. ما عليك سوى استخدام .localize() على سلسلة مفتاح.",
-                            }),
+                            "jsonLocalizationDescription".localize(),
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -109,13 +84,7 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                       child: Column(
                         children: [
                           Text(
-                            "Basic JSON Examples".localize({
-                              "en": "Basic JSON Examples",
-                              "fr": "Exemples JSON de base",
-                              "es": "Ejemplos básicos de JSON",
-                              "de": "Grundlegende JSON-Beispiele",
-                              "ar": "أمثلة JSON الأساسية",
-                            }),
+                            "basicJsonExamples".localize(),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 16),
@@ -158,7 +127,7 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '$_counter',
+                            '123',
                             style: Theme.of(context).textTheme.displayMedium
                                 ?.copyWith(
                                   fontSize: 50,
@@ -179,20 +148,15 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Code Example:".localize({
-                              "en": "Code Example:",
-                              "fr": "Exemple de code:",
-                              "es": "Ejemplo de código:",
-                              "de": "Code-Beispiel:",
-                              "ar": "مثال الكود:",
-                            }),
+                            "codeExample".localize(),
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 8),
                           Container(
+                            width: double.infinity,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
+                              color: Colors.black,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -200,7 +164,8 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     fontFamily: 'monospace',
-                                    color: Colors.blue[800],
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
                                   ),
                             ),
                           ),
@@ -208,6 +173,7 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 12),
                   Wrap(
                     alignment: WrapAlignment.center,
                     spacing: 8,
@@ -216,72 +182,29 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
                       _localeButton(
                         code: 'en',
                         currentLocale: locale,
-                        label: Text(
-                          'English'.localize({
-                            "en": "English",
-                            "fr": "Anglais",
-                            "es": "Inglés",
-                            "de": "Englisch",
-                            "ar": "الإنجليزية",
-                          }),
-                        ),
+                        label: Text("english".localize()),
                       ),
                       _localeButton(
                         code: 'fr',
                         currentLocale: locale,
-                        label: Text(
-                          'French'.localize({
-                            "en": "French",
-                            "fr": "Français",
-                            "es": "Francés",
-                            "de": "Französisch",
-                            "ar": "الفرنسية",
-                          }),
-                        ),
+                        label: Text("french".localize()),
                       ),
                       _localeButton(
                         code: 'de',
                         currentLocale: locale,
-                        label: Text(
-                          'German'.localize({
-                            "en": "German",
-                            "fr": "Allemand",
-                            "es": "Alemán",
-                            "de": "Deutsch",
-                            "ar": "الألمانية",
-                          }),
-                        ),
+                        label: Text("german".localize()),
                       ),
                       _localeButton(
                         code: 'ar',
                         currentLocale: locale,
-                        label: Text(
-                          'Arabic'.localize({
-                            "en": "Arabic",
-                            "fr": "Arabe",
-                            "es": "Árabe",
-                            "de": "Arabisch",
-                            "ar": "العربية",
-                          }),
-                        ),
+                        label: Text("arabic".localize()),
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                 ],
               ),
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            elevation: 0,
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            onPressed: _incrementCounter,
-            tooltip: "increment".localize(),
-            child: const Icon(Icons.add),
           ),
         );
       },

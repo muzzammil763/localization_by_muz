@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'asset_loader.dart';
 import 'localization_manager.dart';
-import 'missing_key_debug_overlay.dart';
 
 /// Provides localization state to the widget tree and initializes
 /// [LocalizationManager].
@@ -22,27 +21,11 @@ class LocalizationProvider extends StatefulWidget {
   /// 'lib/localization.json' for backward compatibility.
   final AssetLoader? assetLoader;
 
-  /// Whether to enable console logging for missing translation keys.
-  final bool enableMissingKeyLogging;
-
-  /// Callback function called when a translation key is missing.
-  final OnMissingKeyCallback? onMissingKey;
-
-  /// Whether to show debug overlay for missing keys (development only).
-  final bool showDebugOverlay;
-
-  /// Whether to enable hot-reload for translations in debug mode.
-  final bool enableHotReload;
-
   const LocalizationProvider({
     super.key,
     required this.child,
     this.defaultLocale = 'en',
     this.assetLoader,
-    this.enableMissingKeyLogging = false,
-    this.onMissingKey,
-    this.showDebugOverlay = false,
-    this.enableHotReload = false,
   });
 
   /// Preloads SharedPreferences to enable immediate locale loading.
@@ -112,10 +95,6 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
     await LocalizationManager.instance.initialize(
       defaultLocale: _currentLocale, // Use the already determined locale
       assetLoader: widget.assetLoader,
-      enableMissingKeyLogging: widget.enableMissingKeyLogging,
-      onMissingKey: widget.onMissingKey,
-      showDebugOverlay: widget.showDebugOverlay,
-      enableHotReload: widget.enableHotReload,
     );
     if (mounted) {
       setState(() {
@@ -142,11 +121,6 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
   @override
   Widget build(BuildContext context) {
     Widget child = widget.child;
-
-    // Wrap with debug overlay if enabled
-    if (widget.showDebugOverlay) {
-      child = MissingKeyDebugOverlay(child: child);
-    }
 
     return LocalizationInherited(
       locale: _currentLocale,

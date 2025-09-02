@@ -36,21 +36,48 @@
     "fr": "Écran d'accueil",
     "es": "Pantalla de inicio",
     "de": "Startbildschirm",
-    "ar": "الشاشة الرئيسية"
+    "ar": "الشاشة الرئيسية",
+    "ur": "ہوم اسکرین"
+  },
+  "homeScreenDescription": {
+    "en": "This is the home screen showcasing JSON-based localization",
+    "fr": "Ceci est l'écran d'accueil présentant la localisation basée sur JSON",
+    "es": "Esta es la pantalla de inicio que muestra la localización basada en JSON",
+    "de": "Dies ist der Startbildschirm, der JSON-basierte Lokalisierung zeigt",
+    "ar": "هذه هي الشاشة الرئيسية التي تعرض الترجمة المبنية على JSON",
+    "ur": "یہ ہوم اسکرین ہے جو JSON پر مبنی لوکلائزیشن کو ظاہر کرتی ہے"
+  },
+  "examples": {
+    "en": "Examples",
+    "fr": "Exemples",
+    "es": "Ejemplos",
+    "de": "Beispiele",
+    "ar": "أمثلة",
+    "ur": "مثالیں"
   },
   "inlineExample": {
     "en": "Inline Localization",
     "fr": "Localisation en ligne",
     "es": "Localización en línea",
     "de": "Inline-Lokalisierung",
-    "ar": "الترجمة المباشرة"
+    "ar": "الترجمة المباشرة",
+    "ur": "ان لائن لوکلائزیشن"
   },
   "jsonExample": {
     "en": "JSON Localization",
     "fr": "Localisation JSON",
     "es": "Localización JSON",
     "de": "JSON-Lokalisierung",
-    "ar": "ترجمة JSON"
+    "ar": "ترجمة JSON",
+    "ur": "JSON لوکلائزیشن"
+  },
+  "jsonExampleDesc": {
+    "en": "Using JSON file translations",
+    "fr": "Utilisation de traductions de fichier JSON",
+    "es": "Usando traducciones de archivo JSON",
+    "de": "Verwendung von JSON-Datei-Übersetzungen",
+    "ar": "استخدام ترجمات ملف JSON",
+    "ur": "JSON فائل کے تراجم کا استعمال"
   },
   "languageSelection": {
     "en": "Language Selection",
@@ -60,82 +87,165 @@
     "ar": "اختيار اللغة",
     "ur": "زبان کا انتخاب"
   },
+  "languageSelectionDesc": {
+    "en": "Change app language",
+    "fr": "Changer la langue de l'application",
+    "es": "Cambiar idioma de la aplicación",
+    "de": "App-Sprache ändern",
+    "ar": "تغيير لغة التطبيق",
+    "ur": "ایپ کی زبان تبدیل کریں"
+  },
+  "whatIsJsonLocalization": {
+    "en": "What is JSON Localization?",
+    "fr": "Qu'est-ce que la localisation JSON?",
+    "es": "¿Qué es la localización JSON?",
+    "de": "Was ist JSON-Lokalisierung?",
+    "ar": "ما هي ترجمة JSON؟",
+    "ur": "JSON لوکلائزیشن کیا ہے؟"
+  },
+  "jsonLocalizationDescription": {
+    "en": "JSON localization uses a localization.json file in your lib/ directory to store all translations. Simply use .localize() on a key string.",
+    "fr": "La localisation JSON utilise un fichier localization.json dans votre répertoire lib/ pour stocker toutes les traductions. Utilisez simplement .localize() sur une chaîne de clé.",
+    "es": "La localización JSON usa un archivo localization.json en tu directorio lib/ para almacenar todas las traducciones. Simplemente usa .localize() en una cadena clave.",
+    "de": "JSON-Lokalisierung verwendet eine localization.json-Datei in Ihrem lib/-Verzeichnis, um alle Übersetzungen zu speichern. Verwenden Sie einfach .localize() auf einem Schlüssel-String.",
+    "ar": "تستخدم ترجمة JSON ملف localization.json في دليل lib/ لتخزين جميع الترجمات. ما عليك سوى استخدام .localize() على سلسلة مفتاح.",
+    "ur": "JSON لوکلائزیشن آپ کے lib/ ڈائرکٹری میں localization.json فائل استعمال کرتا ہے تمام تراجم محفوظ کرنے کے لیے۔ بس کلیدی سٹرنگ پر .localize() استعمال کریں۔"
+  },
+  "basicJsonExamples": {
+    "en": "Basic JSON Examples",
+    "fr": "Exemples JSON de base",
+    "es": "Ejemplos básicos de JSON",
+    "de": "Grundlegende JSON-Beispiele",
+    "ar": "أمثلة JSON الأساسية",
+    "ur": "بنیادی JSON مثالیں"
+  },
+  "codeExample": {
+    "en": "Code Example:",
+    "fr": "Exemple de code:",
+    "es": "Ejemplo de código:",
+    "de": "Code-Beispiel:",
+    "ar": "مثال الكود:",
+    "ur": "کوڈ کی مثال:"
+  },
+  "english": {
+    "en": "English",
+    "fr": "Anglais",
+    "es": "Inglés",
+    "de": "Englisch",
+    "ar": "الإنجليزية",
+    "ur": "انگریزی"
+  },
+  "french": {
+    "en": "French",
+    "fr": "Français",
+    "es": "Francés",
+    "de": "Französisch",
+    "ar": "الفرنسية",
+    "ur": "فرانسیسی"
+  },
+  "german": {
+    "en": "German",
+    "fr": "Allemand",
+    "es": "Alemán",
+    "de": "Deutsch",
+    "ar": "الألمانية",
+    "ur": "جرمن"
+  },
+  "arabic": {
+    "en": "Arabic",
+    "fr": "Arabe",
+    "es": "Árabe",
+    "de": "Arabisch",
+    "ar": "العربية",
+    "ur": "عربی"
+  },
   "currentLanguage": {
     "en": "Current Language",
     "fr": "Langue actuelle",
     "es": "Idioma actual",
     "de": "Aktuelle Sprache",
-    "ar": "اللغة الحالية"
+    "ar": "اللغة الحالية",
+    "ur": "موجودہ زبان"
   },
   "selectLanguage": {
     "en": "Select a language",
     "fr": "Sélectionnez une langue",
     "es": "Selecciona un idioma",
     "de": "Wählen Sie eine Sprache",
-    "ar": "اختر لغة"
+    "ar": "اختر لغة",
+    "ur": "زبان منتخب کریں"
   },
   "aboutApp": {
     "en": "About This App",
     "fr": "À propos de cette application",
     "es": "Acerca de esta aplicación",
     "de": "Über diese App",
-    "ar": "حول هذا التطبيق"
+    "ar": "حول هذا التطبيق",
+    "ur": "اس ایپ کے بارے میں"
   },
   "description": {
     "en": "This app demonstrates both inline and JSON-based localization using the localization_by_muz package.",
     "fr": "Cette application démontre la localisation en ligne et basée sur JSON en utilisant le package localization_by_muz.",
     "es": "Esta aplicación demuestra la localización en línea y basada en JSON usando el paquete localization_by_muz.",
     "de": "Diese App demonstriert sowohl Inline- als auch JSON-basierte Lokalisierung mit dem localization_by_muz-Paket.",
-    "ar": "يوضح هذا التطبيق كلاً من الترجمة المباشرة والقائمة على JSON باستخدام حزمة localization_by_muz."
+    "ar": "يوضح هذا التطبيق كلاً من الترجمة المباشرة والقائمة على JSON باستخدام حزمة localization_by_muz.",
+    "ur": "یہ ایپ localization_by_muz پیکج استعمال کرتے ہوئے ان لائن اور JSON پر مبنی دونوں لوکلائزیشن کا مظاہرہ کرتا ہے۔"
   },
   "features": {
     "en": "Features:",
     "fr": "Caractéristiques:",
     "es": "Características:",
     "de": "Funktionen:",
-    "ar": "الميزات:"
+    "ar": "الميزات:",
+    "ur": "خصوصیات:"
   },
   "feature1": {
     "en": "• Instant language switching",
     "fr": "• Changement de langue instantané",
     "es": "• Cambio de idioma instantáneo",
     "de": "• Sofortiger Sprachwechsel",
-    "ar": "• تبديل اللغة الفوري"
+    "ar": "• تبديل اللغة الفوري",
+    "ur": "• فوری زبان تبدیل کرنا"
   },
   "feature2": {
     "en": "• No app restart required",
     "fr": "• Aucun redémarrage d'application requis",
     "es": "• No se requiere reinicio de la aplicación",
     "de": "• Kein App-Neustart erforderlich",
-    "ar": "• لا حاجة لإعادة تشغيل التطبيق"
+    "ar": "• لا حاجة لإعادة تشغيل التطبيق",
+    "ur": "• ایپ دوبارہ شروع کرنے کی ضرورت نہیں"
   },
   "feature3": {
     "en": "• Two localization methods",
     "fr": "• Deux méthodes de localisation",
     "es": "• Dos métodos de localización",
     "de": "• Zwei Lokalisierungsmethoden",
-    "ar": "• طريقتان للترجمة"
+    "ar": "• طريقتان للترجمة",
+    "ur": "• دو لوکلائزیشن طریقے"
   },
   "counter": {
     "en": "Counter",
     "fr": "Compteur",
     "es": "Contador",
     "de": "Zähler",
-    "ar": "العداد"
+    "ar": "العداد",
+    "ur": "کاؤنٹر"
   },
   "counterValue": {
     "en": "You have pressed the button this many times:",
     "fr": "Vous avez appuyé sur le bouton ce nombre de fois:",
     "es": "Has presionado el botón esta cantidad de veces:",
     "de": "Sie haben den Button so oft gedrückt:",
-    "ar": "لقد ضغطت على الزر هذا العدد من المرات:"
+    "ar": "لقد ضغطت على الزر هذا العدد من المرات:",
+    "ur": "آپ نے بٹن کو اتنی بار دبایا ہے:"
   },
   "increment": {
     "en": "Increment",
     "fr": "Incrémenter",
     "es": "Incrementar",
     "de": "Erhöhen",
-    "ar": "زيادة"
+    "ar": "زيادة",
+    "ur": "اضافہ"
   },
   "formatting": {
     "title": {
@@ -143,42 +253,48 @@
       "fr": "Exemples de formatage",
       "es": "Ejemplos de formato",
       "de": "Formatierungsbeispiele",
-      "ar": "أمثلة التنسيق"
+      "ar": "أمثلة التنسيق",
+      "ur": "فارمیٹنگ کی مثالیں"
     },
     "numbers": {
       "en": "Numbers",
       "fr": "Nombres",
       "es": "Números",
       "de": "Zahlen",
-      "ar": "الأرقام"
+      "ar": "الأرقام",
+      "ur": "نمبرز"
     },
     "currency": {
       "en": "Currency",
       "fr": "Devise",
       "es": "Moneda",
       "de": "Währung",
-      "ar": "العملة"
+      "ar": "العملة",
+      "ur": "کرنسی"
     },
     "percentage": {
       "en": "Percentage",
       "fr": "Pourcentage",
       "es": "Porcentaje",
       "de": "Prozentsatz",
-      "ar": "النسبة المئوية"
+      "ar": "النسبة المئوية",
+      "ur": "فیصد"
     },
     "date": {
       "en": "Date",
       "fr": "Date",
       "es": "Fecha",
       "de": "Datum",
-      "ar": "التاريخ"
+      "ar": "التاريخ",
+      "ur": "تاریخ"
     },
     "time": {
       "en": "Time",
       "fr": "Heure",
       "es": "Hora",
       "de": "Zeit",
-      "ar": "الوقت"
+      "ar": "الوقت",
+      "ur": "وقت"
     }
   },
   "user": {
@@ -188,21 +304,24 @@
         "fr": "Nom",
         "es": "Nombre",
         "de": "Name",
-        "ar": "الاسم"
+        "ar": "الاسم",
+        "ur": "نام"
       },
       "email": {
         "en": "Email Address",
         "fr": "Adresse e-mail",
         "es": "Dirección de correo",
         "de": "E-Mail-Adresse",
-        "ar": "عنوان البريد الإلكتروني"
+        "ar": "عنوان البريد الإلكتروني",
+        "ur": "ای میل ایڈریس"
       },
       "welcome": {
         "en": "Welcome back, {username}!",
         "fr": "Bon retour, {username}!",
         "es": "¡Bienvenido de nuevo, {username}!",
         "de": "Willkommen zurück, {username}!",
-        "ar": "مرحباً بعودتك، {username}!"
+        "ar": "مرحباً بعودتك، {username}!",
+        "ur": "واپس آئیے، {username}!"
       }
     },
     "settings": {
@@ -211,14 +330,16 @@
         "fr": "Thème",
         "es": "Tema",
         "de": "Design",
-        "ar": "المظهر"
+        "ar": "المظهر",
+        "ur": "تھیم"
       },
       "language": {
         "en": "Language",
         "fr": "Langue",
         "es": "Idioma",
         "de": "Sprache",
-        "ar": "اللغة"
+        "ar": "اللغة",
+        "ur": "زبان"
       }
     }
   },
@@ -228,14 +349,40 @@
       "fr": "Démo des clés imbriquées",
       "es": "Demo de claves anidadas",
       "de": "Demo verschachtelter Schlüssel",
-      "ar": "عرض المفاتيح المتداخلة"
+      "ar": "عرض المفاتيح المتداخلة",
+      "ur": "نیسٹڈ کیز ڈیمو"
     },
     "description": {
       "en": "This demonstrates dotted key notation for nested JSON structures.",
       "fr": "Ceci démontre la notation par points pour les structures JSON imbriquées.",
       "es": "Esto demuestra la notación de puntos para estructuras JSON anidadas.",
       "de": "Dies demonstriert die Punkt-Notation für verschachtelte JSON-Strukturen.",
-      "ar": "يوضح هذا تدوين النقاط للهياكل JSON المتداخلة."
+      "ar": "يوضح هذا تدوين النقاط للهياكل JSON المتداخلة.",
+      "ur": "یہ نیسٹڈ JSON ڈھانچوں کے لیے ڈاٹ کی نوٹیشن کا مظاہرہ کرتا ہے۔"
     }
+  },
+  "instantLanguageChange": {
+    "en": "Language changes take effect immediately",
+    "fr": "Les changements de langue prennent effet immédiatement",
+    "es": "Los cambios de idioma surten efecto inmediatamente",
+    "de": "Sprachänderungen werden sofort wirksam",
+    "ar": "تغييرات اللغة تدخل حيز التنفيذ فوراً",
+    "ur": "زبان کی تبدیلیاں فوری طور پر مؤثر ہوتی ہیں"
+  },
+  "noRestartRequired": {
+    "en": "No app restart required!",
+    "fr": "Aucun redémarrage d'application requis!",
+    "es": "¡No se requiere reinicio de la aplicación!",
+    "de": "Kein App-Neustart erforderlich!",
+    "ar": "لا حاجة لإعادة تشغيل التطبيق!",
+    "ur": "ایپ کو دوبارہ شروع کرنے کی ضرورت نہیں!"
+  },
+  "languageChangedTo": {
+    "en": "Language changed to {language}",
+    "fr": "Langue changée en {language}",
+    "es": "Idioma cambiado a {language}",
+    "de": "Sprache geändert zu {language}",
+    "ar": "تم تغيير اللغة إلى {language}",
+    "ur": "زبان تبدیل کر دی گئی {language}"
   }
 }

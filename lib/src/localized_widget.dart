@@ -1,5 +1,6 @@
-import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/widgets.dart';
 
 import 'localization_manager.dart';
 import 'localization_provider.dart';
@@ -13,9 +14,6 @@ class LocalizedText extends StatelessWidget {
   /// The raw text (default) or the translation key when [translations] is
   /// omitted.
   final String text;
-
-  /// Optional per-locale overrides (e.g. `{ 'en': 'Hello', 'fr': 'Bonjour' }`).
-  final Map<String, String>? translations;
 
   /// The style to use for the text.
   final TextStyle? style;
@@ -36,7 +34,6 @@ class LocalizedText extends StatelessWidget {
   const LocalizedText(
     this.text, {
     super.key,
-    this.translations,
     this.style,
     this.textAlign,
     this.maxLines,
@@ -49,15 +46,20 @@ class LocalizedText extends StatelessWidget {
     // This call establishes a dependency so the widget rebuilds on locale changes.
     LocalizationProvider.of(context);
 
-    String localizedText;
-    if (translations != null) {
-      localizedText = text.localizeArgs(
-        translations: translations,
-        args: args,
+    // Don't show anything until LocalizationManager is fully initialized
+    // This prevents showing the key before the translation is loaded
+    if (!LocalizationManager.instance.isInitialized) {
+      return Text(
+        '', // Show empty text until initialized
+        style: style,
+        textAlign: textAlign,
+        maxLines: maxLines,
+        overflow: overflow,
+        textDirection: TextDirection.ltr, // Default direction until initialized
       );
-    } else {
-      localizedText = text.localizeArgs(args: args);
     }
+
+    String localizedText = text.localizeArgs(args: args);
 
     return Text(
       localizedText,
@@ -143,9 +145,6 @@ class AnimatedLocalizedText extends StatelessWidget {
   /// omitted.
   final String text;
 
-  /// Optional per-locale overrides (e.g. `{ 'en': 'Hello', 'fr': 'Bonjour' }`).
-  final Map<String, String>? translations;
-
   /// The style to use for the text.
   final TextStyle? style;
 
@@ -171,7 +170,6 @@ class AnimatedLocalizedText extends StatelessWidget {
   const AnimatedLocalizedText(
     this.text, {
     super.key,
-    this.translations,
     this.style,
     this.textAlign,
     this.maxLines,
@@ -187,22 +185,35 @@ class AnimatedLocalizedText extends StatelessWidget {
     final localizationData = LocalizationProvider.of(context);
     final currentLocale = localizationData?.locale ?? 'en';
 
-    String localizedText;
-    if (translations != null) {
-      localizedText = text.localizeArgs(
-        translations: translations,
-        args: args,
+    // Don't show anything until LocalizationManager is fully initialized
+    // This prevents showing the key before the translation is loaded
+    if (!LocalizationManager.instance.isInitialized) {
+      final uniqueKey = ValueKey('loading_${text}_$currentLocale');
+      return AnimatedSwitcher(
+        duration: duration,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return _buildTransition(child, animation);
+        },
+        child: Text(
+          '', // Show empty text until initialized
+          key: uniqueKey,
+          style: style,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: overflow,
+          textDirection:
+              TextDirection.ltr, // Default direction until initialized
+        ),
       );
-    } else {
-      localizedText = text.localizeArgs(args: args);
     }
+
+    String localizedText = text.localizeArgs(args: args);
 
     final textDirection = LocalizationManager.instance.textDirection;
 
     // Create a unique key that changes whenever locale changes
     // This ensures AnimatedSwitcher always detects a change
-    final uniqueKey = ValueKey(
-        '${text}_${currentLocale}_${translations.hashCode}_${args.hashCode}');
+    final uniqueKey = ValueKey('${text}_${currentLocale}_${args.hashCode}');
 
     return AnimatedSwitcher(
       duration: duration,

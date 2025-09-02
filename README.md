@@ -2,16 +2,14 @@
 
 # Localization by Muz
  
- A simple Flutter package for easy localization with inline text support and JSON-based translations. No extra commands, no code generation - just add the package and start localizing!
+ A simple Flutter package for easy JSON-based localization. No extra commands, no code generation - just add the package and start localizing!
  
 ## Features
 
-- **Inline Localization**: Use `.localize()` method directly on strings with inline translations
 - **JSON-based Localization**: Use a simple JSON file for organized translations
 - **Parameter Interpolation**: Support for dynamic text with placeholders like `{name}` via args map
 - **Number/Date Formatting**: Built-in helpers for formatting numbers, currencies, percentages, dates, and times with locale support
 - **Namespaces/Dotted Keys**: Support for nested JSON structures and dotted key notation (e.g., `user.profile.name`)
-- **Custom Asset Loading**: Pluggable asset loaders including per-locale files and composite strategies
 - **Instant Language Switching**: Change languages instantly without app restart
 - **No Code Generation**: No need for build runner or code generation commands
 - **Simple Setup**: Just add the package and start using
@@ -22,63 +20,12 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  localization_by_muz: ^1.0.4
+  localization_by_muz: ^2.0.0
 ```
 
 ## Usage
 
-### Method 1: Inline Localization
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:localization_by_muz/localization_by_muz.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return LocalizationProvider(
-      defaultLocale: 'en',
-      child: MaterialApp(
-        home: MyHomePage(),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Hello World!".localize({
-          "en": "Hello World!",
-          "fr": "Bonjour le monde!",
-          "es": "¡Hola Mundo!"
-        })),
-      ),
-      body: Column(
-        children: [
-          Text("Welcome".localize({
-            "en": "Welcome",
-            "fr": "Bienvenue",
-            "es": "Bienvenido"
-          })),
-          ElevatedButton(
-            onPressed: () => LocalizationProvider.setLocale(context, 'fr'),
-            child: Text("Switch to French"),
-          ),
-          ElevatedButton(
-            onPressed: () => LocalizationProvider.setLocale(context, 'en'),
-            child: Text("Switch to English"),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
-
-### Method 2: JSON-based Localization
+### JSON-based Localization
 
 1. Create a `localization.json` file in your `lib/` directory (required path for this package):
 
@@ -112,17 +59,27 @@ flutter:
 
 > Note: The package reads from `lib/localization.json` via `rootBundle`. Keep this exact path and add it to assets as shown above.
 
-3. Use in your Flutter app:
+3. Initialize LocalizationManager and use in your Flutter app:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize the localization manager
+  await LocalizationManager.initialize(
+    defaultLocale: 'en',
+  );
+  
+  runApp(MyApp());
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LocalizationProvider(
-      defaultLocale: 'en',
       child: MaterialApp(
         home: MyHomePage(),
       ),
@@ -170,33 +127,33 @@ The UI will update instantly without requiring app restart or refresh!
 
 ### Parameter Interpolation
 
-Support for dynamic text with placeholders:
+Support for dynamic text with placeholders using JSON-based translations:
 
 ```dart
-// Inline translations with parameters
-Text("greeting".localizeArgs(
-  translations: {
-    "en": "Hello {name}, welcome to {app}!",
-    "fr": "Bonjour {name}, bienvenue dans {app}!",
-    "es": "¡Hola {name}, bienvenido a {app}!"
-  },
-  args: {
-    "name": "John",
-    "app": "My App"
-  }
-))
-
-// JSON-based translations with parameters
 // In localization.json:
 // {
 //   "userWelcome": {
 //     "en": "Welcome back, {username}!",
-//     "fr": "Bon retour, {username}!"
+//     "fr": "Bon retour, {username}!",
+//     "es": "¡Bienvenido de vuelta, {username}!"
+//   },
+//   "greeting": {
+//     "en": "Hello {name}, welcome to {app}!",
+//     "fr": "Bonjour {name}, bienvenue dans {app}!",
+//     "es": "¡Hola {name}, bienvenido a {app}!"
 //   }
 // }
 
+// Use localizeArgs for translations with parameters
 Text("userWelcome".localizeArgs(
   args: {"username": "Alice"}
+))
+
+Text("greeting".localizeArgs(
+  args: {
+    "name": "John",
+    "app": "My App"
+  }
 ))
 ```
 
@@ -286,113 +243,118 @@ Text("user.welcome.message".localizeArgs(
 
 **Backward Compatibility**: The package still supports flat key structures, so existing implementations continue to work without changes.
 
-### Custom Asset Loading
 
-Use different asset loading strategies:
+
+
+
+## Complete Working Example
+
+Here's a complete example showing language selection and switching:
 
 ```dart
-// Per-locale files (assets/i18n/en.json, fr.json, etc.)
-LocalizationProvider(
-  defaultLocale: 'en',
-  assetLoader: PerLocaleAssetLoader(basePath: 'assets/i18n'),
-  child: MyApp(),
-)
+import 'package:flutter/material.dart';
+import 'package:localization_by_muz/localization_by_muz.dart';
 
-// Composite loading (combine multiple loaders)
-LocalizationProvider(
-  defaultLocale: 'en',
-  assetLoader: CompositeAssetLoader([
-    DefaultAssetLoader(),
-    PerLocaleAssetLoader(basePath: 'assets/i18n'),
-  ]),
-  child: MyApp(),
-)
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  await LocalizationManager.initialize(
+    defaultLocale: 'en',
+  );
+  
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LocalizationProvider(
+      child: MaterialApp(
+        title: 'appTitle'.localize(),
+        home: LanguageSelectionScreen(),
+      ),
+    );
+  }
+}
+
+class LanguageSelectionScreen extends StatelessWidget {
+  final List<Map<String, String>> languages = [
+    {'code': 'en', 'name': 'English'},
+    {'code': 'fr', 'name': 'French'},
+    {'code': 'es', 'name': 'Spanish'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('selectLanguage'.localize()),
+      ),
+      body: ListView.builder(
+        itemCount: languages.length,
+        itemBuilder: (context, index) {
+          final language = languages[index];
+          return ListTile(
+            title: Text(language['name']!),
+            onTap: () {
+              LocalizationProvider.setLocale(context, language['code']!);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'languageChangedTo'.localizeArgs(
+                      args: {'language': language['name']!}
+                    )
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
 ```
 
-### Missing Key Diagnostics
+With corresponding `localization.json`:
 
-Track and debug missing translation keys:
-
-```dart
-// Enable logging and debug overlay
-LocalizationProvider(
-  defaultLocale: 'en',
-  enableMissingKeyLogging: true,
-  showDebugOverlay: true, // Only works in debug mode
-  onMissingKey: (key, locale) {
-    print('Missing key: $key for locale: $locale');
-    // Send to analytics, log to file, etc.
+```json
+{
+  "appTitle": {
+    "en": "Localization Demo",
+    "fr": "Démo de Localisation",
+    "es": "Demo de Localización"
   },
-  child: MyApp(),
-)
-
-// Configure at runtime
-LocalizationManager.instance.configureMissingKeyDiagnostics(
-  enableLogging: true,
-  onMissingKey: (key, locale) {
-    // Handle missing keys
+  "selectLanguage": {
+    "en": "Select Language",
+    "fr": "Sélectionner la langue",
+    "es": "Seleccionar idioma"
   },
-);
-
-// Access missing keys
-Set<String> missingKeys = LocalizationManager.instance.missingKeys;
-
-// Clear tracked missing keys
-LocalizationManager.instance.clearMissingKeys();
+  "languageChangedTo": {
+    "en": "Language changed to {language}",
+    "fr": "Langue changée en {language}",
+    "es": "Idioma cambiado a {language}"
+  }
+}
 ```
-
-### Hot-reload Translations (Debug Mode)
-
-Enable automatic reloading of translations during development for faster iteration:
-
-```dart
-LocalizationProvider(
-  defaultLocale: 'en',
-  enableHotReload: true, // Enable hot-reload in debug mode
-  child: MyApp(),
-)
-```
-
-**Features:**
-- **Debug-only**: Hot-reload only works in debug mode for performance
-- **Automatic detection**: Checks for translation changes every 2 seconds
-- **Live updates**: UI updates automatically when translations change
-- **Error handling**: Gracefully handles asset loading failures
-- **Performance optimized**: Only reloads when actual changes are detected
-
-**How it works:**
-```dart
-// Hot-reload is automatically enabled when:
-// 1. enableHotReload: true is set
-// 2. App is running in debug mode
-// 3. Asset loader is available
-
-// Console output when hot-reload is active:
-// 🔥 Hot-reload enabled for translations (checking every 2 seconds)
-// 🔄 Translation changes detected, reloading...
-// ✅ Translations reloaded successfully
-```
-
-**Note:** Hot-reload requires your translations to be loaded from assets. It works with all asset loaders including `DefaultAssetLoader`, `PerLocaleAssetLoader`, and custom implementations.
 
 ## Features Breakdown
 
-- **Two localization methods**: Choose between inline translations or JSON file approach
+- **JSON-based localization**: Simple JSON file approach for organized translations
 - **Parameter interpolation**: Dynamic text with `{placeholder}` support via `.localizeArgs(args: {...})`
 - **Number/date formatting**: Built-in locale-aware formatting for numbers, currencies, percentages, dates, and times
 - **Namespaces/dotted keys**: Support for nested JSON structures and dotted key notation for better organization
-- **Custom asset loading**: Pluggable loaders (DefaultAssetLoader, PerLocaleAssetLoader, CompositeAssetLoader, MemoryAssetLoader)
-- **Missing key diagnostics**: Toggleable logs, `onMissingKey` callback, optional debug overlay
-- **Hot-reload translations**: Automatic translation reloading in debug mode for faster development
-- **Instant updates**: Language changes reflect immediately in the UI
+- **Missing key diagnostics**: Track missing translation keys for debugging
+- **Instant updates**: Language changes reflect immediately in the UI without app restart
 - **Zero configuration**: No build runner or code generation required
-- **Simple API**: Just use `.localize()` on any string
-- **Fallback support**: If translation not found, returns original text
+- **Simple API**: Just use `.localize()` for simple text and `.localizeArgs()` for parameterized text
+- **Fallback support**: If translation not found, returns the key as fallback text
 - **Provider pattern**: Efficient state management using Flutter's provider pattern
+- **Easy initialization**: Simple async initialization in main() function
 
 ## Additional Information
 
-This package is designed to make Flutter localization as simple as possible. Whether you prefer inline translations for small projects or JSON files for larger applications, this package has you covered.
+This package is designed to make Flutter localization as simple as possible using JSON-based translations. Perfect for projects of any size that need organized, maintainable localization.
 
 For issues and feature requests, please visit our GitHub repository.
 

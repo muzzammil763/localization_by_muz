@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
@@ -88,65 +87,6 @@ class LanguageSelectionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 12),
-                Text(
-                  "selectLanguage".localize(),
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: Card.outlined(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Icon(
-                            CupertinoIcons.info,
-                            color: Colors.black,
-                            size: 45,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "instantLanguageChange".localize({
-                              "en": "Language changes take effect immediately",
-                              "fr":
-                                  "Les changements de langue prennent effet immédiatement",
-                              "es":
-                                  "Los cambios de idioma surten efecto inmediatamente",
-                              "de": "Sprachänderungen werden sofort wirksam",
-                              "ar": "تغييرات اللغة تدخل حيز التنفيذ فوراً",
-                              "ur":
-                                  "زبان کی تبدیلیاں فوری طور پر مؤثر ہوتی ہیں",
-                            }),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "noRestartRequired".localize({
-                              "en": "No app restart required!",
-                              "fr": "Aucun redémarrage d'application requis!",
-                              "es":
-                                  "¡No se requiere reinicio de la aplicación!",
-                              "de": "Kein App-Neustart erforderlich!",
-                              "ar": "لا حاجة لإعادة تشغيل التطبيق!",
-                              "ur": "ایپ کو دوبارہ شروع کرنے کی ضرورت نہیں!",
-                            }),
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 12),
                 Expanded(
                   child: ListView.builder(
@@ -198,20 +138,9 @@ class LanguageSelectionScreen extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "languageChangedTo".localize({
-                                    "en":
-                                        "Language changed to ${language['nativeName']}",
-                                    "fr":
-                                        "Langue changée en ${language['nativeName']}",
-                                    "es":
-                                        "Idioma cambiado a ${language['nativeName']}",
-                                    "de":
-                                        "Sprache geändert zu ${language['nativeName']}",
-                                    "ar":
-                                        "تم تغيير اللغة إلى ${language['nativeName']}",
-                                    "ur":
-                                        "زبان ${language['nativeName']} میں تبدیل کر دی گئی",
-                                  }),
+                                  "languageChangedTo".localizeArgs(
+                                    args: {'language': language['nativeName']!},
+                                  ),
                                 ),
                                 duration: const Duration(seconds: 1),
                                 behavior: SnackBarBehavior.floating,

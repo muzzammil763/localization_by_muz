@@ -2,13 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
-import 'about_screen.dart';
-import 'custom_asset_demo_screen.dart';
-import 'formatting_demo_screen.dart';
-import 'inline_example_screen.dart';
 import 'json_example_screen.dart';
 import 'language_selection_screen.dart';
-import 'rtl_demo_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -56,18 +51,7 @@ class HomeScreen extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "homeScreenDescription".localize({
-                            "en":
-                                "This is the home screen showcasing localization features",
-                            "fr":
-                                "Ceci est l'écran d'accueil présentant les fonctionnalités de localisation",
-                            "es":
-                                "Esta es la pantalla de inicio que muestra las funciones de localización",
-                            "de":
-                                "Dies ist der Startbildschirm, der Lokalisierungsfunktionen zeigt",
-                            "ar":
-                                "هذه هي الشاشة الرئيسية التي تعرض ميزات التوطين",
-                          }),
+                          "homeScreenDescription".localize(),
                           style: TextStyle(
                             fontSize: 14,
                             fontStyle: FontStyle.italic,
@@ -80,51 +64,21 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Examples:".localize({
-                    "en": "Examples",
-                    "fr": "Exemples",
-                    "es": "Ejemplos",
-                    "de": "Beispiele",
-                    "ar": "أمثلة",
-                  }),
+                  "examples".localize(),
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 16),
                 Expanded(
                   child: GridView.count(
-                    crossAxisCount: 2,
+                    crossAxisCount: 1,
                     crossAxisSpacing: 4,
                     mainAxisSpacing: 4,
+                    childAspectRatio: 3,
                     children: [
                       _buildNavigationCard(
                         context,
-                        title: "inlineExample".localize(),
-                        subtitle: "inlineExampleDesc".localize({
-                          "en": "Using inline translations",
-                          "fr": "Utilisation de traductions en ligne",
-                          "es": "Usando traducciones en línea",
-                          "de": "Verwendung von Inline-Übersetzungen",
-                          "ar": "استخدام الترجمات المباشرة",
-                        }),
-                        icon: Icons.code,
-                        color: Colors.blue,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const InlineExampleScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildNavigationCard(
-                        context,
                         title: "jsonExample".localize(),
-                        subtitle: "jsonExampleDesc".localize({
-                          "en": "Using JSON file translations",
-                          "fr": "Utilisation de traductions de fichier JSON",
-                          "es": "Usando traducciones de archivo JSON",
-                          "de": "Verwendung von JSON-Datei-Übersetzungen",
-                          "ar": "استخدام ترجمات ملف JSON",
-                        }),
+                        subtitle: "jsonExampleDesc".localize(),
                         icon: Icons.description_outlined,
                         color: Colors.green,
                         onTap: () => Navigator.push(
@@ -137,13 +91,7 @@ class HomeScreen extends StatelessWidget {
                       _buildNavigationCard(
                         context,
                         title: "languageSelection".localize(),
-                        subtitle: "languageSelectionDesc".localize({
-                          "en": "Change app language",
-                          "fr": "Changer la langue de l'application",
-                          "es": "Cambiar idioma de la aplicación",
-                          "de": "App-Sprache ändern",
-                          "ar": "تغيير لغة التطبيق",
-                        }),
+                        subtitle: "languageSelectionDesc".localize(),
                         icon: CupertinoIcons.globe,
                         color: Colors.orange,
                         onTap: () => Navigator.push(
@@ -151,96 +99,6 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) =>
                                 const LanguageSelectionScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildNavigationCard(
-                        context,
-                        title: "Custom Assets".localize({
-                          "en": "Custom Assets",
-                          "fr": "Actifs personnalisés",
-                          "es": "Activos personalizados",
-                          "de": "Benutzerdefinierte Assets",
-                          "ar": "الأصول المخصصة",
-                        }),
-                        subtitle: "customAssetDesc".localize({
-                          "en": "Per-locale asset loading demo",
-                          "fr": "Démo de chargement d'actifs par locale",
-                          "es": "Demo de carga de activos por idioma",
-                          "de": "Demo für lokalisierte Asset-Ladung",
-                          "ar": "عرض تحميل الأصول حسب اللغة",
-                        }),
-                        icon: Icons.folder_special,
-                        color: Colors.teal,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CustomAssetDemoScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildNavigationCard(
-                        context,
-                        title: "formatting.title".localize(),
-                        subtitle: "formattingDesc".localize({
-                          "en": "Number/date formatting & nested keys",
-                          "fr": "Formatage nombre/date & clés imbriquées",
-                          "es": "Formato número/fecha & claves anidadas",
-                          "de": "Zahlen-/Datumsformat & verschachtelte Schlüssel",
-                          "ar": "تنسيق الأرقام/التاريخ والمفاتيح المتداخلة",
-                        }),
-                        icon: Icons.format_list_numbered,
-                        color: Colors.indigo,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FormattingDemoScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildNavigationCard(
-                        context,
-                        title: "RTL Demo".localize({
-                          "en": "RTL Demo",
-                          "fr": "Démo RTL",
-                          "es": "Demo RTL",
-                          "de": "RTL-Demo",
-                          "ar": "عرض RTL",
-                          "ur": "RTL ڈیمو",
-                        }),
-                        subtitle: "rtlDemoDesc".localize({
-                          "en": "Right-to-Left language support",
-                          "fr": "Support des langues de droite à gauche",
-                          "es": "Soporte de idiomas de derecha a izquierda",
-                          "de": "Unterstützung für Rechts-nach-Links-Sprachen",
-                          "ar": "دعم اللغات من اليمين إلى اليسار",
-                          "ur": "دائیں سے بائیں زبانوں کی سپورٹ",
-                        }),
-                        icon: Icons.format_textdirection_r_to_l,
-                        color: Colors.deepOrange,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RTLDemoScreen(),
-                          ),
-                        ),
-                      ),
-                      _buildNavigationCard(
-                        context,
-                        title: "aboutApp".localize(),
-                        subtitle: "aboutAppDesc".localize({
-                          "en": "Learn about this package",
-                          "fr": "En savoir plus sur ce package",
-                          "es": "Aprende sobre este paquete",
-                          "de": "Erfahren Sie mehr über dieses Paket",
-                          "ar": "تعرف على هذه الحزمة",
-                        }),
-                        icon: Icons.info_outline,
-                        color: Colors.purple,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AboutScreen(),
                           ),
                         ),
                       ),
@@ -275,7 +133,7 @@ class HomeScreen extends StatelessWidget {
               Icon(icon, size: 32, color: color),
               const SizedBox(height: 8),
               Text(
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 title,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -286,7 +144,7 @@ class HomeScreen extends StatelessWidget {
                 subtitle,
                 style: TextStyle(fontSize: 12),
                 textAlign: TextAlign.center,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
