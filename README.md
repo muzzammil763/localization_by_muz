@@ -20,7 +20,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  localization_by_muz: ^2.0.0
+  localization_by_muz: ^2.1.0
 ```
 
 ## Usage
@@ -59,20 +59,13 @@ flutter:
 
 > Note: The package reads from `lib/localization.json` via `rootBundle`. Keep this exact path and add it to assets as shown above.
 
-3. Initialize LocalizationManager and use in your Flutter app:
+3. Use in your Flutter app:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize the localization manager
-  await LocalizationManager.initialize(
-    defaultLocale: 'en',
-  );
-  
+void main() {
   runApp(MyApp());
 }
 
@@ -80,8 +73,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LocalizationProvider(
-      child: MaterialApp(
-        home: MyHomePage(),
+      defaultLocale: 'en',
+      child: LocalizedBuilder(
+        builder: (context, locale) {
+          return MaterialApp(
+            title: "appTitle".localize(),
+            home: MyHomePage(),
+          );
+        },
       ),
     );
   }
@@ -112,6 +111,13 @@ class MyHomePage extends StatelessWidget {
   }
 }
 ```
+
+**That's it!** Just wrap your MaterialApp with `LocalizedBuilder` once, and you're done. The package automatically:
+- Initializes the localization system in the background
+- Handles persistent locale storage
+- Rebuilds all localized text when language changes
+- Provides instant language switching without app restart
+- No need to wrap individual screens with `LocalizedBuilder`
 
 ### Language Switching
 
@@ -243,6 +249,64 @@ Text("user.welcome.message".localizeArgs(
 
 **Backward Compatibility**: The package still supports flat key structures, so existing implementations continue to work without changes.
 
+## Migration from Older Versions
+
+If you're upgrading from an older version where you had to wrap each screen with `LocalizedBuilder`:
+
+**Old approach (no longer needed on each screen):**
+```dart
+class MyScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LocalizedBuilder(  // ❌ Remove from individual screens
+      builder: (context, locale) {
+        return Scaffold(
+          appBar: AppBar(title: Text("title".localize())),
+          body: Text("content".localize()),
+        );
+      },
+    );
+  }
+}
+```
+
+**New approach - wrap MaterialApp once:**
+```dart
+// In your main app file
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LocalizationProvider(
+      defaultLocale: 'en',
+      child: LocalizedBuilder(  // ✅ Wrap MaterialApp once
+        builder: (context, locale) {
+          return MaterialApp(
+            title: 'appTitle'.localize(),
+            home: MyScreen(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Individual screens - no wrapper needed
+class MyScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(  // ✅ Direct usage - automatic rebuilding
+      appBar: AppBar(title: Text("title".localize())),
+      body: Text("content".localize()),
+    );
+  }
+}
+```
+
+**Key changes:**
+1. Remove `LocalizedBuilder` from individual screens
+2. Wrap your `MaterialApp` with `LocalizedBuilder` once in your main app widget
+3. All screens will automatically rebuild when language changes!
+
 
 
 
@@ -255,13 +319,7 @@ Here's a complete example showing language selection and switching:
 import 'package:flutter/material.dart';
 import 'package:localization_by_muz/localization_by_muz.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  await LocalizationManager.initialize(
-    defaultLocale: 'en',
-  );
-  
+void main() {
   runApp(MyApp());
 }
 
@@ -269,9 +327,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LocalizationProvider(
-      child: MaterialApp(
-        title: 'appTitle'.localize(),
-        home: LanguageSelectionScreen(),
+      defaultLocale: 'en',
+      child: LocalizedBuilder(
+        builder: (context, locale) {
+          return MaterialApp(
+            title: 'appTitle'.localize(),
+            home: LanguageSelectionScreen(),
+          );
+        },
       ),
     );
   }
@@ -322,8 +385,23 @@ With corresponding `localization.json`:
 {
   "appTitle": {
     "en": "Localization Demo",
-    "fr": "Démo de Localisation",
+    "fr": "Démo de Localisation", 
     "es": "Demo de Localización"
+  },
+  "helloWorld": {
+    "en": "Hello World",
+    "fr": "Bonjour Le Monde",
+    "es": "Hola Mundo"
+  },
+  "welcome": {
+    "en": "Welcome to our app!",
+    "fr": "Bienvenue dans notre application!",
+    "es": "¡Bienvenido a nuestra aplicación!"
+  },
+  "goodbye": {
+    "en": "Goodbye! See you later",
+    "fr": "Au revoir! À bientôt", 
+    "es": "¡Adiós! Hasta luego"
   },
   "selectLanguage": {
     "en": "Select Language",
@@ -345,12 +423,13 @@ With corresponding `localization.json`:
 - **Number/date formatting**: Built-in locale-aware formatting for numbers, currencies, percentages, dates, and times
 - **Namespaces/dotted keys**: Support for nested JSON structures and dotted key notation for better organization
 - **Missing key diagnostics**: Track missing translation keys for debugging
-- **Instant updates**: Language changes reflect immediately in the UI without app restart
+- **Instant updates**: Language changes reflect immediately in the UI without app restart or manual rebuilding
 - **Zero configuration**: No build runner or code generation required
 - **Simple API**: Just use `.localize()` for simple text and `.localizeArgs()` for parameterized text
+- **Automatic rebuilding**: Wrap MaterialApp once with `LocalizedBuilder` - all screens update automatically
 - **Fallback support**: If translation not found, returns the key as fallback text
 - **Provider pattern**: Efficient state management using Flutter's provider pattern
-- **Easy initialization**: Simple async initialization in main() function
+- **Easy initialization**: Automatic initialization - just wrap your app with `LocalizationProvider`
 
 ## Additional Information
 

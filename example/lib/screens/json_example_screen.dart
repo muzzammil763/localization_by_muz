@@ -44,170 +44,166 @@ class _JsonExampleScreenState extends State<JsonExampleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return LocalizedBuilder(
-      builder: (context, locale) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            title: Text("jsonExample".localize()),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(12),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Card.outlined(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "whatIsJsonLocalization".localize(),
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "jsonLocalizationDescription".localize(),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Card.outlined(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "basicJsonExamples".localize(),
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "helloWorld".localize(),
-                            style: Theme.of(context).textTheme.headlineSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "welcome".localize(),
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "goodbye".localize(),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Card.outlined(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "counter".localize(),
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "counterValue".localize(),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '123',
-                            style: Theme.of(context).textTheme.displayMedium
-                                ?.copyWith(
-                                  fontSize: 50,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w900,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Card.outlined(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "codeExample".localize(),
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              'Text("helloWorld".localize())',
-                              style: Theme.of(context).textTheme.bodyMedium
-                                  ?.copyWith(
-                                    fontFamily: 'monospace',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-
+    final locale = LocalizationManager.instance.currentLocale;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        title: Text("jsonExample".localize()),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Card.outlined(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _localeButton(
-                        code: 'en',
-                        currentLocale: locale,
-                        label: Text("english".localize()),
+                      Text(
+                        "whatIsJsonLocalization".localize(),
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      _localeButton(
-                        code: 'fr',
-                        currentLocale: locale,
-                        label: Text("french".localize()),
-                      ),
-                      _localeButton(
-                        code: 'de',
-                        currentLocale: locale,
-                        label: Text("german".localize()),
-                      ),
-                      _localeButton(
-                        code: 'ar',
-                        currentLocale: locale,
-                        label: Text("arabic".localize()),
+                      const SizedBox(height: 8),
+                      Text(
+                        "jsonLocalizationDescription".localize(),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card.outlined(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        "basicJsonExamples".localize(),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "helloWorld".localize(),
+                        style: Theme.of(context).textTheme.headlineSmall,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "welcome".localize(),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "goodbye".localize(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card.outlined(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        "counter".localize(),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "counterValue".localize(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '123',
+                        style: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(
+                              fontSize: 50,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card.outlined(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "codeExample".localize(),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Text("helloWorld".localize())',
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontFamily: 'monospace',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                children: [
+                  _localeButton(
+                    code: 'en',
+                    currentLocale: locale,
+                    label: Text("english".localize()),
+                  ),
+                  _localeButton(
+                    code: 'fr',
+                    currentLocale: locale,
+                    label: Text("french".localize()),
+                  ),
+                  _localeButton(
+                    code: 'de',
+                    currentLocale: locale,
+                    label: Text("german".localize()),
+                  ),
+                  _localeButton(
+                    code: 'ar',
+                    currentLocale: locale,
+                    label: Text("arabic".localize()),
+                  ),
                 ],
               ),
-            ),
+              const SizedBox(height: 12),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

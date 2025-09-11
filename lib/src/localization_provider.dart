@@ -67,6 +67,7 @@ class LocalizationProvider extends StatefulWidget {
 class _LocalizationProviderState extends State<LocalizationProvider> {
   String _currentLocale = 'en';
   bool _isInitialized = false;
+  GlobalKey _rebuildKey = GlobalKey();
 
   @override
   void initState() {
@@ -108,6 +109,8 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
     if (mounted) {
       setState(() {
         _currentLocale = LocalizationManager.instance.currentLocale;
+        // Force a complete rebuild by changing the GlobalKey
+        _rebuildKey = GlobalKey();
       });
     }
   }
@@ -120,12 +123,13 @@ class _LocalizationProviderState extends State<LocalizationProvider> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = widget.child;
-
     return LocalizationInherited(
       locale: _currentLocale,
       isInitialized: _isInitialized,
-      child: child,
+      child: KeyedSubtree(
+        key: _rebuildKey,
+        child: widget.child,
+      ),
     );
   }
 }

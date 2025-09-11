@@ -1,3 +1,52 @@
+## 2.1.0
+
+**Major Improvements:**
+
+- **Simplified Setup**: No longer requires wrapping individual screens with `LocalizedBuilder` - just wrap your `MaterialApp` once
+- **Automatic Rebuilding**: All localized text automatically updates when language changes without manual wrapping
+- **Enhanced LocalizationProvider**: Improved to force complete widget tree rebuilds on locale changes using `KeyedSubtree`
+- **Better User Experience**: Instant language switching across the entire app with minimal setup
+- **Updated Documentation**: Complete rewrite of README with correct, simplified usage instructions
+- **Migration Guide**: Added clear migration path from older versions that required per-screen wrapping
+- **Working Examples**: All README examples are verified to work correctly with instant language switching
+
+**API Changes:**
+
+- `LocalizationProvider` now automatically handles rebuilding without requiring `LocalizedBuilder` on each screen
+- Recommended pattern: Wrap `MaterialApp` with `LocalizedBuilder` once instead of wrapping individual screens
+- All existing APIs remain backward compatible
+
+**Example Migration:**
+
+```dart
+// Old approach (still works but not recommended)
+class MyScreen extends StatelessWidget {
+  Widget build(context) {
+    return LocalizedBuilder(  // ❌ No longer needed on each screen
+      builder: (context, locale) => Scaffold(...)
+    );
+  }
+}
+
+// New simplified approach  
+class MyApp extends StatelessWidget {
+  Widget build(context) {
+    return LocalizationProvider(
+      child: LocalizedBuilder(  // ✅ Wrap MaterialApp once
+        builder: (context, locale) => MaterialApp(...)
+      )
+    );
+  }
+}
+```
+
+**Documentation:**
+
+- Updated all examples to show the simplified one-time setup
+- Added complete working localization.json examples
+- Enhanced feature descriptions to highlight automatic rebuilding
+- Added troubleshooting and migration sections
+
 ## 2.0.0
 
 **BREAKING CHANGES:**

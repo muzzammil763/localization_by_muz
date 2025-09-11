@@ -10,106 +10,102 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LocalizedBuilder(
-      builder: (context, locale) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            title: Text("appTitle".localize()),
-            actions: [
-              IconButton(
-                icon: Icon(CupertinoIcons.globe),
-                tooltip: "languageSelection".localize(),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LanguageSelectionScreen(),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        title: Text("appTitle".localize()),
+        actions: [
+          IconButton(
+            icon: Icon(CupertinoIcons.globe),
+            tooltip: "languageSelection".localize(),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LanguageSelectionScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card.outlined(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "welcome".localize(),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                },
+                    Text(
+                      "homeScreenDescription".localize(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Card.outlined(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          "welcome".localize(),
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          "homeScreenDescription".localize(),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontStyle: FontStyle.italic,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "examples".localize(),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 1,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                childAspectRatio: 3,
+                children: [
+                  _buildNavigationCard(
+                    context,
+                    title: "jsonExample".localize(),
+                    subtitle: "jsonExampleDesc".localize(),
+                    icon: Icons.description_outlined,
+                    color: Colors.green,
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const JsonExampleScreen(),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "examples".localize(),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                    childAspectRatio: 3,
-                    children: [
-                      _buildNavigationCard(
-                        context,
-                        title: "jsonExample".localize(),
-                        subtitle: "jsonExampleDesc".localize(),
-                        icon: Icons.description_outlined,
-                        color: Colors.green,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const JsonExampleScreen(),
-                          ),
-                        ),
+                  _buildNavigationCard(
+                    context,
+                    title: "languageSelection".localize(),
+                    subtitle: "languageSelectionDesc".localize(),
+                    icon: CupertinoIcons.globe,
+                    color: Colors.orange,
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const LanguageSelectionScreen(),
                       ),
-                      _buildNavigationCard(
-                        context,
-                        title: "languageSelection".localize(),
-                        subtitle: "languageSelectionDesc".localize(),
-                        icon: CupertinoIcons.globe,
-                        color: Colors.orange,
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const LanguageSelectionScreen(),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 

@@ -6,11 +6,9 @@ class LanguageSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LocalizedBuilder(
-      builder: (context, locale) {
-        final currentLocale = LocalizationManager.instance.currentLocale;
+    final currentLocale = LocalizationManager.instance.currentLocale;
 
-        final languages = [
+    final languages = [
           {
             'code': 'en',
             'name': 'English',
@@ -157,7 +155,5 @@ class LanguageSelectionScreen extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
   }
 }

@@ -6,7 +6,10 @@ import 'localization_manager.dart';
 import 'localization_provider.dart';
 import 'string_extension.dart';
 
-/// A [Text] widget that renders a localized string.
+/// A [Text] widget that renders a localized string and automatically rebuilds when locale changes.
+///
+/// This widget establishes a dependency on the LocalizationProvider and will rebuild
+/// automatically when the locale changes, eliminating the need for LocalizedBuilder.
 ///
 /// You can provide inline [translations], or omit it to treat [text] as a
 /// translation key resolved via `lib/localization.json`.
@@ -131,6 +134,37 @@ class AutoDirectionality extends StatelessWidget {
     return Directionality(
       textDirection: textDirection,
       child: child,
+    );
+  }
+}
+
+/// A convenience wrapper that automatically makes all Text widgets using .localize()
+/// rebuild when locale changes, without requiring LocalizedBuilder on each screen.
+///
+/// Wrap your MaterialApp with this widget to enable automatic rebuilding of
+/// localized text throughout your app.
+///
+/// Example:
+/// ```dart
+/// LocalizationProvider(
+///   child: LocalizationAutoRebuild(
+///     child: MaterialApp(
+///       home: MyHomePage(),
+///     ),
+///   ),
+/// )
+/// ```
+class LocalizationAutoRebuild extends StatelessWidget {
+  final Widget child;
+
+  const LocalizationAutoRebuild({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return LocalizedBuilder(
+      builder: (context, locale) {
+        return child;
+      },
     );
   }
 }
